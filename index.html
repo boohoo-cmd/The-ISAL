@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ISA League — International Schools Alumni League</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --lime:#C8F542;
+  --dark:#0a0a0a;
+  --card:#111111;
+  --border:rgba(240,237,230,0.08);
+  --text:#f0ede6;
+  --muted:rgba(240,237,230,0.45);
+  --dim:rgba(240,237,230,0.2);
+  --red:#E24B4A;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--dark);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;}
+.page{display:none;min-height:100vh;}
+.page.active{display:block;}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 48px;border-bottom:0.5px solid var(--border);position:sticky;top:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(10px);z-index:1000;}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--lime);cursor:pointer;}
+.nav-links{display:flex;gap:28px;list-style:none;}
+.nav-links li a{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;cursor:pointer;transition:color .2s;padding:4px 0;border-bottom:1px solid transparent;}
+.nav-links li a:hover,.nav-links li a.active{color:var(--lime);border-bottom-color:var(--lime);}
+.nav-cta{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;background:var(--lime);color:var(--dark);padding:9px 20px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:opacity .2s;}
+.nav-cta:hover{opacity:.85;}
+
+/* TICKER */
+.ticker{background:var(--lime);padding:9px 48px;display:flex;align-items:center;gap:20px;overflow:hidden;}
+.ticker-label{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:var(--dark);white-space:nowrap;flex-shrink:0;border-right:1px solid rgba(0,0,0,0.2);padding-right:20px;}
+.ticker-wrap{overflow:hidden;flex:1;}
+.ticker-scroll{display:flex;gap:48px;animation:ticker 30s linear infinite;white-space:nowrap;}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.ticker-item{font-size:12px;font-weight:500;color:var(--dark);flex-shrink:0;}
+.ticker-item span{opacity:.5;margin:0 6px;}
+
+/* HERO */
+.hero{padding:80px 48px 64px;display:grid;grid-template-columns:1fr 400px;gap:64px;align-items:center;border-bottom:0.5px solid var(--border);position:relative;overflow:hidden;min-height:520px;}
+.hero::before{content:'ISAL';position:absolute;right:-30px;top:-40px;font-family:'Bebas Neue',sans-serif;font-size:340px;color:rgba(200,245,66,0.025);line-height:1;pointer-events:none;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(200,245,66,0.08);border:0.5px solid rgba(200,245,66,0.25);padding:6px 14px;margin-bottom:22px;}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--lime);animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.badge-text{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--lime);}
+.hero-tag{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--lime);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.hero-tag::before{content:'';display:block;width:24px;height:1px;background:var(--lime);}
+h1.hero-title{font-family:'Bebas Neue',sans-serif;font-size:92px;line-height:.9;letter-spacing:2px;margin-bottom:22px;}
+h1.hero-title span{color:var(--lime);}
+.hero-sub{font-size:14px;line-height:1.75;color:var(--muted);max-width:440px;margin-bottom:32px;font-weight:300;}
+.hero-btns{display:flex;gap:12px;}
+.btn-p{background:var(--lime);color:var(--dark);border:none;padding:13px 30px;font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;cursor:pointer;transition:opacity .2s;}
+.btn-p:hover{opacity:.85;}
+.btn-g{background:transparent;color:var(--muted);border:0.5px solid rgba(240,237,230,0.2);padding:13px 30px;font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.btn-g:hover{border-color:rgba(240,237,230,.5);color:var(--text);}
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);}
+.h-stat{background:var(--dark);padding:28px 24px;display:flex;flex-direction:column;gap:6px;}
+.h-stat-n{font-family:'Bebas Neue',sans-serif;font-size:46px;color:var(--lime);line-height:1;}
+.h-stat-l{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);}
+
+/* SECTIONS */
+.section{padding:56px 48px;border-bottom:0.5px solid var(--border);}
+.sec-hdr{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:28px;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;}
+.sec-link{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--lime);cursor:pointer;text-decoration:none;transition:opacity .2s;}
+.sec-link:hover{opacity:.7;}
+
+/* STANDINGS */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);text-align:left;padding:0 12px 12px;border-bottom:0.5px solid var(--border);}
+th:not(:nth-child(1)):not(:nth-child(2)){text-align:center;}
+td{padding:13px 12px;font-size:13px;border-bottom:0.5px solid rgba(240,237,230,.04);color:var(--muted);}
+td:not(:nth-child(1)):not(:nth-child(2)){text-align:center;}
+tr:hover td{background:rgba(240,237,230,.02);}
+.pos{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--dim);width:36px;}
+.pos.gold{color:var(--lime);}
+.pos.silver{color:#aaa;}
+.pos.bronze{color:#cd7f32;}
+.team-cell{display:flex;align-items:center;gap:12px;}
+.badge{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0;letter-spacing:0;}
+.tname{font-weight:500;font-size:13px;color:var(--text);}
+.pts{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--text) !important;}
+.gd-p{color:var(--lime) !important;font-size:12px;}
+.gd-n{color:var(--red) !important;font-size:12px;}
+.gd-z{color:var(--dim) !important;font-size:12px;}
+.form-row{display:flex;gap:3px;justify-content:center;}
+.fd{width:8px;height:8px;border-radius:50%;}
+.fw{background:var(--lime);}
+.fl{background:var(--red);}
+.fdraw{background:rgba(240,237,230,.3);}
+
+/* PERFORMERS */
+.perf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+.perf-card{background:var(--dark);padding:32px 28px;position:relative;overflow:hidden;transition:background .2s;cursor:pointer;}
+.perf-card:hover{background:#0f0f0f;}
+.perf-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--lime);transform:scaleX(0);transition:transform .3s;transform-origin:left;}
+.perf-card:hover::after{transform:scaleX(1);}
+.perf-cat{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);margin-bottom:18px;}
+.perf-av{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:16px;margin-bottom:14px;}
+.perf-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;line-height:1;margin-bottom:4px;}
+.perf-team{font-size:11px;color:var(--dim);margin-bottom:18px;}
+.perf-stat{display:flex;align-items:baseline;gap:6px;}
+.perf-n{font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--lime);line-height:1;}
+.perf-l{font-size:11px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;}
+
+/* MEDIA GRID */
+.media-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:1px;background:var(--border);}
+.media-card{background:var(--dark);padding:28px;cursor:pointer;transition:background .2s;}
+.media-card:hover{background:#0f0f0f;}
+.media-card.feat{padding:36px;}
+.media-tag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--lime);margin-bottom:12px;}
+.media-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;line-height:1.1;margin-bottom:10px;}
+.media-card:not(.feat) .media-title{font-size:17px;}
+.media-exc{font-size:13px;line-height:1.65;color:var(--muted);font-weight:300;margin-bottom:18px;}
+.media-meta{font-size:11px;color:var(--dim);}
+.mdiv{border-top:0.5px solid var(--border);margin:16px 0;}
+.media-col{display:flex;flex-direction:column;gap:1px;background:var(--border);}
+.media-col .media-card{flex:1;}
+
+/* SPONSORS */
+.sponsors{padding:28px 48px;display:flex;align-items:center;gap:40px;border-bottom:0.5px solid var(--border);}
+.sp-label{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);white-space:nowrap;}
+.sp-pill{padding:8px 20px;border:0.5px solid rgba(240,237,230,.12);font-size:12px;font-weight:500;color:var(--muted);letter-spacing:1px;}
+
+/* FOOTER */
+footer{padding:40px 48px;display:flex;align-items:center;justify-content:space-between;}
+.ft-logo{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:var(--dim);}
+.ft-text{font-size:11px;color:var(--dim);}
+
+/* PAGE HEADERS */
+.page-hdr{padding:56px 48px 40px;border-bottom:0.5px solid var(--border);}
+.page-hdr-tag{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--lime);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.page-hdr-tag::before{content:'';width:20px;height:1px;background:var(--lime);}
+.page-hdr h2{font-family:'Bebas Neue',sans-serif;font-size:60px;letter-spacing:2px;line-height:.95;}
+.page-hdr p{font-size:14px;color:var(--muted);margin-top:12px;max-width:500px;font-weight:300;line-height:1.7;}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:0.5px solid var(--border);}
+.tab{font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:14px 28px;cursor:pointer;color:var(--dim);border-bottom:2px solid transparent;transition:all .2s;}
+.tab.active,.tab:hover{color:var(--lime);border-bottom-color:var(--lime);}
+
+/* FIXTURES */
+.fixture-group{margin-bottom:32px;}
+.matchday-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);padding:12px 0;border-bottom:0.5px solid var(--border);margin-bottom:12px;}
+.fixture-row{display:grid;grid-template-columns:1fr auto 1fr auto;align-items:center;padding:16px 0;border-bottom:0.5px solid rgba(240,237,230,.04);gap:16px;}
+.fix-team{display:flex;align-items:center;gap:12px;}
+.fix-team.away{flex-direction:row-reverse;text-align:right;}
+.fix-name{font-weight:500;font-size:14px;}
+.fix-score{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--text);text-align:center;min-width:80px;}
+.fix-score.upcoming{font-size:14px;color:var(--dim);letter-spacing:1px;}
+.fix-date{font-size:11px;color:var(--dim);text-align:center;min-width:80px;}
+
+/* TEAMS GRID */
+.teams-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+.team-card{background:var(--dark);padding:32px 28px;cursor:pointer;transition:background .2s;position:relative;overflow:hidden;}
+.team-card:hover{background:#0f0f0f;}
+.team-card::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--lime);transform:scaleY(0);transition:transform .3s;}
+.team-card:hover::after{transform:scaleY(1);}
+.tc-badge{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:16px;margin-bottom:16px;}
+.tc-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:4px;}
+.tc-sub{font-size:11px;color:var(--dim);margin-bottom:20px;}
+.tc-stats{display:flex;gap:24px;}
+.tc-stat{display:flex;flex-direction:column;gap:3px;}
+.tc-stat-n{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--lime);}
+.tc-stat-l{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);}
+.tc-pos{position:absolute;top:28px;right:28px;font-family:'Bebas Neue',sans-serif;font-size:48px;color:rgba(240,237,230,.05);line-height:1;}
+
+/* PLAYER PROFILE */
+.player-hero{padding:48px;display:grid;grid-template-columns:auto 1fr auto;gap:48px;align-items:center;border-bottom:0.5px solid var(--border);background:linear-gradient(135deg,#0d0d0d 0%,var(--dark) 100%);}
+.player-av{width:120px;height:120px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:40px;flex-shrink:0;}
+.player-pos-badge{display:inline-block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--lime);border:0.5px solid rgba(200,245,66,.3);padding:4px 10px;margin-bottom:10px;}
+.player-name{font-family:'Bebas Neue',sans-serif;font-size:56px;letter-spacing:2px;line-height:.95;margin-bottom:6px;}
+.player-team{font-size:13px;color:var(--muted);}
+.player-stats-row{display:flex;gap:1px;background:var(--border);}
+.ps{background:var(--dark);padding:20px 28px;text-align:center;flex:1;}
+.ps-n{font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--lime);}
+.ps-l{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-top:4px;}
+
+/* PLAYERS TABLE */
+.players-grid{display:grid;gap:1px;background:var(--border);}
+.player-row{background:var(--dark);display:grid;grid-template-columns:48px 1fr 120px 80px 80px 80px 80px;align-items:center;padding:16px 20px;gap:12px;cursor:pointer;transition:background .2s;}
+.player-row:hover{background:#0f0f0f;}
+.player-row.header{background:#0a0a0a;cursor:default;}
+.player-row.header span{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);}
+.player-row:hover .pr-name{color:var(--lime);}
+.pr-rank{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--dim);}
+.pr-info{display:flex;align-items:center;gap:12px;}
+.pr-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;}
+.pr-name{font-weight:500;font-size:14px;transition:color .2s;}
+.pr-team{font-size:11px;color:var(--dim);}
+.pr-stat{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--text);text-align:center;}
+.pr-stat.hi{color:var(--lime);}
+
+/* MATCH PAGE */
+.match-hero{padding:48px;text-align:center;border-bottom:0.5px solid var(--border);background:#0d0d0d;}
+.match-teams{display:flex;align-items:center;justify-content:center;gap:40px;margin-bottom:20px;}
+.match-team{display:flex;flex-direction:column;align-items:center;gap:12px;}
+.match-badge{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:24px;}
+.match-tname{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;}
+.match-score{font-family:'Bebas Neue',sans-serif;font-size:96px;color:var(--lime);line-height:1;letter-spacing:4px;}
+.match-info{font-size:11px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:8px;}
+.match-body{padding:48px;display:grid;grid-template-columns:1fr 320px;gap:48px;}
+.events-list{display:flex;flex-direction:column;gap:0;}
+.event-item{display:grid;grid-template-columns:60px 1fr;gap:16px;padding:16px 0;border-bottom:0.5px solid rgba(240,237,230,.04);align-items:center;}
+.event-min{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--lime);}
+.event-detail{display:flex;flex-direction:column;gap:2px;}
+.event-player{font-weight:500;font-size:14px;}
+.event-type{font-size:11px;color:var(--dim);letter-spacing:1px;}
+.event-icon{font-size:14px;margin-right:6px;}
+.match-stats-panel{border-left:0.5px solid var(--border);padding-left:40px;}
+.ms-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;margin-bottom:20px;}
+.ms-row{margin-bottom:20px;}
+.ms-labels{display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px;color:var(--muted);}
+.ms-bar{height:4px;background:rgba(240,237,230,.08);border-radius:2px;position:relative;overflow:hidden;}
+.ms-fill-home{position:absolute;left:0;top:0;bottom:0;background:var(--lime);border-radius:2px;}
+.ms-fill-away{position:absolute;right:0;top:0;bottom:0;background:rgba(240,237,230,.3);border-radius:2px;}
+
+/* MEDIA PAGE */
+.media-page-grid{display:grid;grid-template-columns:2fr 1fr;gap:1px;background:var(--border);}
+.article-card{background:var(--dark);padding:32px;cursor:pointer;transition:background .2s;}
+.article-card:hover{background:#0f0f0f;}
+.article-card.large{padding:40px;}
+.art-tag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--lime);margin-bottom:12px;}
+.art-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:1px;line-height:1.05;margin-bottom:10px;}
+.art-title.sm{font-size:18px;}
+.art-exc{font-size:13px;line-height:1.7;color:var(--muted);font-weight:300;margin-bottom:16px;}
+.art-meta{font-size:11px;color:var(--dim);}
+.sidebar-articles{display:flex;flex-direction:column;gap:1px;background:var(--border);}
+.sidebar-art{background:var(--dark);padding:24px;cursor:pointer;transition:background .2s;flex:1;}
+.sidebar-art:hover{background:#0f0f0f;}
+
+/* FAN ZONE */
+.fanzone-grid{display:grid;grid-template-columns:2fr 1fr;gap:32px;padding:48px;}
+.fan-post{background:var(--card);border:0.5px solid var(--border);padding:28px;margin-bottom:16px;}
+.fan-post-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.fan-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;}
+.fan-author{font-weight:500;font-size:14px;}
+.fan-date{font-size:11px;color:var(--dim);}
+.fan-content{font-size:14px;line-height:1.7;color:var(--muted);margin-bottom:16px;}
+.fan-reactions{display:flex;gap:16px;}
+.fan-react{font-size:12px;color:var(--dim);cursor:pointer;padding:6px 12px;border:0.5px solid var(--border);transition:all .2s;}
+.fan-react:hover{border-color:var(--lime);color:var(--lime);}
+.poll-card{background:var(--card);border:0.5px solid var(--border);padding:28px;margin-bottom:16px;}
+.poll-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;margin-bottom:20px;}
+.poll-opt{padding:12px 16px;border:0.5px solid var(--border);margin-bottom:8px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.poll-opt:hover{border-color:var(--lime);}
+.poll-fill{position:absolute;left:0;top:0;bottom:0;background:rgba(200,245,66,.08);}
+.poll-text{position:relative;font-size:13px;display:flex;justify-content:space-between;}
+.poll-pct{color:var(--lime);font-weight:500;}
+
+/* MERCH */
+.merch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+.merch-card{background:var(--dark);padding:0;cursor:pointer;transition:background .2s;overflow:hidden;}
+.merch-card:hover{background:#0f0f0f;}
+.merch-img{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#1a1a1a,#0f0f0f);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.merch-icon{font-family:'Bebas Neue',sans-serif;font-size:80px;color:rgba(200,245,66,.12);letter-spacing:2px;}
+.merch-badge-merch{position:absolute;top:16px;left:16px;background:var(--lime);color:var(--dark);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;font-weight:500;}
+.merch-info{padding:20px 24px;}
+.merch-name{font-weight:500;font-size:15px;margin-bottom:4px;}
+.merch-price{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--lime);}
+.merch-sub{font-size:11px;color:var(--dim);margin-top:2px;}
+.merch-btn{width:100%;background:transparent;border:0.5px solid rgba(240,237,230,.15);color:var(--muted);padding:10px;font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:12px;}
+.merch-btn:hover{background:var(--lime);color:var(--dark);border-color:var(--lime);}
+
+/* CART TOAST */
+.toast{position:fixed;bottom:32px;right:32px;background:var(--lime);color:var(--dark);padding:14px 24px;font-size:13px;font-weight:500;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s;letter-spacing:.5px;}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* ADMIN PANEL */
+.admin-sidebar{width:220px;background:#0d0d0d;border-right:0.5px solid var(--border);position:fixed;top:0;left:0;bottom:0;padding:24px 0;z-index:500;display:none;}
+.admin-sidebar.open{display:flex;flex-direction:column;}
+.admin-logo{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;color:var(--lime);padding:0 20px 20px;border-bottom:0.5px solid var(--border);margin-bottom:12px;}
+.admin-nav-item{padding:12px 20px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);cursor:pointer;transition:all .2s;}
+.admin-nav-item:hover,.admin-nav-item.active{color:var(--lime);background:rgba(200,245,66,.05);border-left:2px solid var(--lime);}
+.admin-content{margin-left:220px;padding:40px;min-height:100vh;}
+.admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;}
+.admin-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;}
+.admin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;}
+.admin-stat{background:var(--card);border:0.5px solid var(--border);padding:20px;display:flex;flex-direction:column;gap:8px;}
+.admin-stat-n{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--lime);}
+.admin-stat-l{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);}
+.admin-table{width:100%;border-collapse:collapse;background:var(--card);border:0.5px solid var(--border);}
+.admin-table th{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);padding:12px 16px;border-bottom:0.5px solid var(--border);text-align:left;}
+.admin-table td{padding:12px 16px;font-size:13px;border-bottom:0.5px solid rgba(240,237,230,.04);color:var(--muted);}
+.admin-table tr:hover td{background:rgba(240,237,230,.02);}
+.admin-action{font-size:11px;color:var(--lime);cursor:pointer;letter-spacing:1px;border:none;background:none;font-family:'DM Sans',sans-serif;}
+.status-pill{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:2px;}
+.status-live{background:rgba(200,245,66,.1);color:var(--lime);}
+.status-done{background:rgba(240,237,230,.08);color:var(--muted);}
+.status-up{background:rgba(56,86,255,.1);color:#85B7EB;}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2000;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:#111;border:0.5px solid var(--border);padding:40px;width:480px;max-width:90vw;max-height:80vh;overflow-y:auto;}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:24px;}
+.modal-field{margin-bottom:16px;}
+.modal-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:6px;display:block;}
+.modal-input{width:100%;background:var(--dark);border:0.5px solid rgba(240,237,230,.15);color:var(--text);padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s;}
+.modal-input:focus{border-color:rgba(200,245,66,.4);}
+.modal-btns{display:flex;gap:12px;margin-top:24px;}
+.modal-cancel{flex:1;background:transparent;border:0.5px solid rgba(240,237,230,.15);color:var(--muted);padding:12px;font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;}
+.modal-submit{flex:1;background:var(--lime);border:none;color:var(--dark);padding:12px;font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-weight:500;}
+
+/* RESPONSIVE helpers */
+@media(max-width:900px){
+  nav{padding:14px 20px;}
+  .nav-links{display:none;}
+  .hero{grid-template-columns:1fr;padding:40px 20px;}
+  .hero::before{display:none;}
+  .hero-stats{grid-template-columns:repeat(4,1fr);}
+  .section,.sponsors,.page-hdr{padding-left:20px;padding-right:20px;}
+  .perf-grid,.teams-grid,.merch-grid{grid-template-columns:1fr 1fr;}
+  .media-grid,.media-page-grid{grid-template-columns:1fr;}
+  .match-body{grid-template-columns:1fr;padding:24px 20px;}
+  .match-stats-panel{border-left:none;padding-left:0;border-top:0.5px solid var(--border);padding-top:28px;}
+  .fanzone-grid{grid-template-columns:1fr;padding:20px;}
+  .ticker{padding:9px 20px;}
+  footer{padding:24px 20px;flex-direction:column;gap:8px;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-logo" onclick="showPage('home')">I.S.A LEAGUE</div>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+    <li><a onclick="showPage('league')" id="nav-league">League</a></li>
+    <li><a onclick="showPage('teams')" id="nav-teams">Teams</a></li>
+    <li><a onclick="showPage('players')" id="nav-players">Players</a></li>
+    <li><a onclick="showPage('media')" id="nav-media">Media</a></li>
+    <li><a onclick="showPage('fanzone')" id="nav-fanzone">Fan Zone</a></li>
+    <li><a onclick="showPage('merch')" id="nav-merch">Merch</a></li>
+    <li><a onclick="showPage('admin')" id="nav-admin" style="color:rgba(200,245,66,.4)">Admin</a></li>
+  </ul>
+  <button class="nav-cta" onclick="showModal('login-modal')">Sign In</button>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker">
+  <span class="ticker-label">ISAL1 FINAL</span>
+  <div class="ticker-wrap">
+    <div class="ticker-scroll">
+      <span class="ticker-item">Harambe Stars <span>CHAMPIONS</span> 24 Pts · +14 GD 🏆</span>
+      <span class="ticker-item">Golden Boot <span>—</span> Themba Nkesiga & Arafat Mugezi · 7 Goals</span>
+      <span class="ticker-item">Assist King <span>—</span> Stefano Loro (ISU Leopards) · 9 Assists</span>
+      <span class="ticker-item">Golden Glove <span>—</span> Aqeel Parpia (AK 47z) · 6 Clean Sheets</span>
+      <span class="ticker-item">KISU Lions <span>vs</span> ISU Leopards 3-0 · MD1</span>
+      <span class="ticker-item">Taibah Spartanz <span>vs</span> KISU Lions 4-1 · MD10</span>
+      <span class="ticker-item">AK Supa Strykaz <span>vs</span> Rainbow OG's 5-1 · MD9</span>
+      <span class="ticker-item">ISAL2 <span>KICKS OFF</span> July 4 · Legends Sports Grounds</span>
+      <span class="ticker-item">Harambe Stars <span>CHAMPIONS</span> 24 Pts · +14 GD 🏆</span>
+      <span class="ticker-item">Golden Boot <span>—</span> Themba Nkesiga & Arafat Mugezi · 7 Goals</span>
+      <span class="ticker-item">Assist King <span>—</span> Stefano Loro (ISU Leopards) · 9 Assists</span>
+      <span class="ticker-item">Golden Glove <span>—</span> Aqeel Parpia (AK 47z) · 6 Clean Sheets</span>
+      <span class="ticker-item">KISU Lions <span>vs</span> ISU Leopards 3-0 · MD1</span>
+      <span class="ticker-item">Taibah Spartanz <span>vs</span> KISU Lions 4-1 · MD10</span>
+      <span class="ticker-item">AK Supa Strykaz <span>vs</span> Rainbow OG's 5-1 · MD9</span>
+      <span class="ticker-item">ISAL2 <span>KICKS OFF</span> July 4 · Legends Sports Grounds</span>
+    </div>
+  </div>
+</div>
+
+<!-- =================== HOME PAGE =================== -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <div>
+      <div class="hero-badge"><div class="badge-dot"></div><span class="badge-text">ISAL2 — Kicks off July 4 · Legends Grounds</span></div>
+      <div class="hero-tag">The International Schools Alumni League</div>
+      <h1 class="hero-title">WHERE <span>LEGACY</span><br>MEETS THE<br>PITCH</h1>
+      <p class="hero-sub">Alumni from Uganda's top international schools competing for glory. One league. Twelve teams. Zero mercy.</p>
+      <div class="hero-btns">
+        <button class="btn-p" onclick="showPage('league')">View Standings</button>
+        <button class="btn-g" onclick="showPage('teams')">Explore Teams</button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="h-stat"><div class="h-stat-n">12</div><div class="h-stat-l">Teams</div></div>
+      <div class="h-stat"><div class="h-stat-n">ISAL2</div><div class="h-stat-l">Current Season</div></div>
+      <div class="h-stat"><div class="h-stat-n">110+</div><div class="h-stat-l">Matches Played</div></div>
+      <div class="h-stat"><div class="h-stat-n">Jul 4</div><div class="h-stat-l">Next Kickoff</div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sec-hdr">
+      <div class="sec-title">ISAL1 — Final Standings</div>
+      <a class="sec-link" onclick="showPage('league')">Full Table →</a>
+    </div>
+    <div class="table-wrap">
+      <table id="home-standings"></table>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sec-hdr"><div class="sec-title">Season Standouts</div><a class="sec-link" onclick="showPage('players')">Full Stats →</a></div>
+    <div class="perf-grid">
+      <div class="perf-card" onclick="showPlayerProfile('themba')">
+        <div class="perf-cat">Golden Boot</div>
+        <div class="perf-av" style="background:#1a2a0a;color:#C8F542">TN</div>
+        <div class="perf-name">Themba Nkesiga</div>
+        <div class="perf-team">Taibah Olympians</div>
+        <div class="perf-stat"><div class="perf-n">7</div><div class="perf-l">Goals</div></div>
+      </div>
+      <div class="perf-card" onclick="showPlayerProfile('stefano')">
+        <div class="perf-cat">Assist King</div>
+        <div class="perf-av" style="background:#1a1a0a;color:#EF9F27">SL</div>
+        <div class="perf-name">Stefano Loro</div>
+        <div class="perf-team">ISU Leopards</div>
+        <div class="perf-stat"><div class="perf-n">9</div><div class="perf-l">Assists</div></div>
+      </div>
+      <div class="perf-card" onclick="showPlayerProfile('aqeel')">
+        <div class="perf-cat">Golden Glove</div>
+        <div class="perf-av" style="background:#1a0a2a;color:#AFA9EC">AP</div>
+        <div class="perf-name">Aqeel Parpia</div>
+        <div class="perf-team">Aga Khan 47z</div>
+        <div class="perf-stat"><div class="perf-n">6</div><div class="perf-l">Clean Sheets</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sec-hdr"><div class="sec-title">Latest from the Insider</div><a class="sec-link" onclick="showPage('media')">All Articles →</a></div>
+    <div class="media-grid">
+      <div class="media-card feat" onclick="showPage('media')">
+        <div class="media-tag">Latest · May 29, 2025</div>
+        <div class="media-title">New Season, New Energy: WOLIS Saints Join the ISA League for ISAL2</div>
+        <p class="media-exc">As ISAL2 approaches, the league welcomes Word of Life International School into the fold — a new chapter of growth, diversity, and electric competition for the alumni football community.</p>
+        <div class="media-meta">Arthur Jagwer, Director of Football · The I.S.A League Insider</div>
+      </div>
+      <div class="media-col">
+        <div class="media-card" onclick="showPage('media')">
+          <div class="media-tag">Partners</div>
+          <div class="media-title">Football Meets Flavor: ISA x Lock & Key</div>
+          <div class="mdiv"></div>
+          <div class="media-meta">April 26, 2025</div>
+        </div>
+        <div class="media-card" onclick="showPage('media')">
+          <div class="media-tag">Partners</div>
+          <div class="media-title">Official Hydration Partner: JIBU Joins ISAL</div>
+          <div class="mdiv"></div>
+          <div class="media-meta">April 25, 2025</div>
+        </div>
+      </div>
+      <div class="media-col">
+        <div class="media-card" onclick="showPage('media')">
+          <div class="media-tag">Analysis</div>
+          <div class="media-title">Sleeper Teams of ISAL1 Reviewed</div>
+          <div class="mdiv"></div>
+          <div class="media-meta">April 23, 2025</div>
+        </div>
+        <div class="media-card" onclick="showPage('media')">
+          <div class="media-tag">ISAL1 Stats</div>
+          <div class="media-title">Best Players: Goals, Assists & Clean Sheets</div>
+          <div class="mdiv"></div>
+          <div class="media-meta">May 1, 2025</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sponsors">
+    <span class="sp-label">Official Partners</span>
+    <div class="sp-pill">🍽 Lock & Key Restaurant</div>
+    <div class="sp-pill">💧 JIBU Hydration</div>
+    <div class="sp-pill">📻 NRG Radio UG — Media Partner</div>
+  </div>
+
+  <footer>
+    <div class="ft-logo">I.S.A LEAGUE</div>
+    <div class="ft-text">© 2025 International Schools Alumni League · Kampala, Uganda</div>
+    <div class="ft-text">Instagram · X · TikTok</div>
+  </footer>
+</div>
+
+<!-- =================== LEAGUE PAGE =================== -->
+<div id="page-league" class="page">
+  <div class="page-hdr">
+    <div class="page-hdr-tag">Season 1 — Final</div>
+    <h2>League Hub</h2>
+    <p>Full standings, fixtures and results from ISAL1. ISAL2 kicks off July 4 at Legends Sports Grounds.</p>
+  </div>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab(this,'standings-tab')">Standings</div>
+    <div class="tab" onclick="switchTab(this,'fixtures-tab')">Fixtures & Results</div>
+  </div>
+
+  <div id="standings-tab" class="section">
+    <div class="table-wrap">
+      <table id="full-standings"></table>
+    </div>
+  </div>
+
+  <div id="fixtures-tab" class="section" style="display:none">
+    <div id="fixtures-list"></div>
+  </div>
+
+  <footer>
+    <div class="ft-logo">I.S.A LEAGUE</div>
+    <div class="ft-text">© 2025 International Schools Alumni League</div>
+    <div class="ft-text">Venue: Legends Sports Grounds, Kampala</div>
+  </footer>
+</div>
+
+<!-- =================== TEAMS PAGE =================== -->
+<div id="page-teams" class="page">
+  <div class="page-hdr">
+    <div class="page-hdr-tag">ISAL1 / ISAL2</div>
+    <h2>Teams</h2>
+    <p>All 12 clubs competing in the International Schools Alumni League. Click any team to view their full profile.</p>
+  </div>
+  <div class="teams-grid" id="teams-grid"></div>
+  <footer><div class="ft-logo">I.S.A LEAGUE</div><div class="ft-text">© 2025 International Schools Alumni League</div><div class="ft-text">12 Teams · 2 Seasons</div></footer>
+</div>
+
+<!-- TEAM DETAIL -->
+<div id="page-team-detail" class="page">
+  <div id="team-detail-content"></div>
+  <footer><div class="ft-logo">I.S.A LEAGUE</div><div class="ft-text">© 2025 International Schools Alumni League</div><div class="ft-text"></div></footer>
+</div>
+
+<!-- =================== PLAYERS PAGE =================== -->
+<div id="page-players" class="page">
+  <div class="page-hdr">
+    <div class="page-hdr-tag">ISAL1 — Season Stats</div>
+    <h2>Player Stats</h2>
+    <p>Full individual statistics from the inaugural season. Click any player to view their full profile.</p>
+  </div>
+  <div class="tabs">
+    <div class="tab active" onclick="switchPlayerTab(this,'tab-goals')">Goals</div>
+    <div class="tab" onclick="switchPlayerTab(this,'tab-assists')">Assists</div>
+    <div class="tab" onclick="switchPlayerTab(this,'tab-cs')">Clean Sheets</div>
+    <div class="tab" onclick="switchPlayerTab(this,'tab-all')">All Players</div>
+  </div>
+  <div class="section" style="padding-top:0">
+    <div id="tab-goals" class="players-grid"></div>
+    <div id="tab-assists" class="players-grid" style="display:none"></div>
+    <div id="tab-cs" class="players-grid" style="display:none"></div>
+    <div id="tab-all" class="players-grid" style="display:none"></div>
+  </div>
+  <footer><div class="ft-logo">I.S.A LEAGUE</div><div class="ft-text">© 2025 International Schools Alumni League</div><div class="ft-text">Stats · ISAL1</div></footer>
+</div>
+
+<!-- PLAYER PROFILE -->
+<div id="page-player-profile" class="page">
+  <div id="player-profile-content"></div>
+  <footer><div class="ft-logo">I.S.A LEAGUE</div><div class="ft-text">© 2025 International Schools Alumni League</div><div class="ft-text"></div></footer>
+</div>
+
+<!-- =================== MATCH PAGE =================== -->
+<div id="page-match" class="page">
+  <div id="match-content"></div>
+  <footer><div class="ft-logo">I.S.A LEAGUE</div><div class="ft-text">© 2025 International Schools Alumni League</div><div class="ft-text">Match Report · ISAL1</div></footer>
+</div>
+
+<!-- =================== MEDIA PAGE =================== -->
+<div id="page-media" class="page">
+  <div class="page-hdr">
+    <div class="page-hdr-tag">The I.S.A League Insider</div>
+    <h2>Media</h2>
+    <p>Official coverage, pundit analysis, partner news and match reports. Powered by NRG Radio UG.</p>
+  </div>
+  <div class="media-page-grid">
+    <div>
+      <div class="article-card large" onclick="openArticle('wolis')">
+        <div class="art-tag">Featured · Expansion · May 29, 2025</div>
+        <div class="art-title">New Season, New Energy: WOLIS Saints Join the I.S.A League in Season 2 Expansion</div>
+        <p class="art-exc">As ISAL2 approaches, the league is proud to unveil its latest addition — the Word of Life International School (WOLIS) Saints. The entry of the Saints marks a new chapter of growth and diversity for the league, reinforcing its mission of uniting former international school students through the spirit of competition, camaraderie, and community.</p>
+        <div class="art-meta">By The I.S.A League Insider · 5 min read</div>
+      </div>
+      <div class="article-card" onclick="openArticle('best-players')">
+        <div class="art-tag">ISAL1 · Stats · May 1, 2025</div>
+        <div class="art-title">Best Players from ISAL1: Goals, Assists and Clean Sheets</div>
+        <p class="art-exc">The inaugural ISA League season wasn't just about team triumphs — it was a showcase of individual brilliance. From prolific goal scorers to assist maestros and defensive rocks, these players left their mark on the pitch.</p>
+        <div class="art-meta">By The I.S.A League Insider · 8 min read</div>
+      </div>
+      <div class="article-card" onclick="openArticle('sleeper')">
+        <div class="art-tag">Analysis · April 23, 2025</div>
+        <div class="art-title">Sleeper Teams from ISAL1: Performances Reviewed</div>
+        <p class="art-exc">Not every story from the inaugural season was written in the top four. Some teams punched above their weight, defied expectations, and hinted at what's coming in ISAL2.</p>
+        <div class="art-meta">By The I.S.A League Insider · 6 min read</div>
+      </div>
+    </div>
+    <div class="sidebar-articles">
+      <div style="padding:20px 24px;border-bottom:0.5px solid var(--border);">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:12px;">Official Partners</div>
+        <div class="sidebar-art" style="padding:0;background:transparent;" onclick="openArticle('lockkey')">
+          <div class="art-tag">Partners · April 26</div>
+          <div class="art-title sm">Football Meets Flavor: ISA x Lock & Key Restaurant</div>
+        </div>
+        <div class="mdiv"></div>
+        <div class="sidebar-art" style="padding:0;background:transparent;" onclick="openArticle('jibu')">
+          <div class="art-tag">Partners · April 25</div>
+          <div class="art-title sm">Official Hydration Partner: JIBU Joins ISAL</div>
+        </div>
+      </div>
+      <div style="padding:20px 24px;border-bottom:0.5px solid var(--border);">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:12px;">NRG Radio Coverage</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.65;font-weight:300;">NRG Radio UG is the official media partner for ISAL2. Live match commentary, weekly shows, and exclusive interviews — on air from July 4.</div>
+      </div>
+      <div style="padding:20px 24px;">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:12px;">About the League</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.65;font-weight:300;margin-bottom:12px;"><strong style="color:var(--text);font-weight:500;">Vision</strong><br>Unite communities through the love of football, fostering lifelong connections and a spirit of sportsmanship.</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.65;font-weight:300;"><strong style="color:var(--text);font-weight:500;">Mission</strong><br>A competitive yet inclusive platform for alumni, promoting health, camaraderie, and community engagement.</div>
+      </div>
+    </div>
+  </div>
+  <footer><div class="ft-logo">I.S.A LEAGUE</div><div class="ft-text">© 2025 International Schools Alumni League</div><div class="ft-text">Media Partner: NRG Radio UG</div></footer>
+</div>
+
+<!-- =================== FAN ZONE =================== -->
+<div id="page-fanzone" class="page">
+  <div class="page-hdr">
+    <div class="page-hdr-tag">Community</div>
+    <h2>Fan Zone</h2>
+    <p>The voice of the stands. React, debate, predict, and celebrate with the ISA community.</p>
+  </div>
+  <div class="fanzone-grid">
+    <div>
+      <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);margin-bottom:16px;">Community Posts</div>
+      <div class="fan-post">
+        <div class="fan-post-header">
+          <div class="fan-av" style="background:#1a2a0a;color:#C8F542">KM</div>
+          <div><div class="fan-author">Kalinda Mukasa</div><div class="fan-date">May 30, 2025 · Harambe Stars fan</div></div>
+        </div>
+        <p class="fan-content">ISAL1 was just a preview. We're coming back in Season 2 even stronger. Jordan Bagambe has been training every morning at Legends — the Golden Glove isn't going anywhere. ISAL2 is Harambe's again 💚</p>
+        <div class="fan-reactions">
+          <div class="fan-react" onclick="reactPost(this,'🔥')">🔥 47</div>
+          <div class="fan-react" onclick="reactPost(this,'💬')">💬 12 Comments</div>
+          <div class="fan-react" onclick="reactPost(this,'🔁')">🔁 Share</div>
+        </div>
+      </div>
+      <div class="fan-post">
+        <div class="fan-post-header">
+          <div class="fan-av" style="background:#1a1a0a;color:#EF9F27">AT</div>
+          <div><div class="fan-author">Amara Tendo</div><div class="fan-date">May 28, 2025 · ISU Leopards fan</div></div>
+        </div>
+        <p class="fan-content">Can we talk about Stefano Loro's 9 assists for a second? The man was basically a one-person attacking system. If ISU get their defense right in ISAL2 they're top 3 easily. Loro + a proper striker = scary.</p>
+        <div class="fan-reactions">
+          <div class="fan-react" onclick="reactPost(this,'🔥')">🔥 31</div>
+          <div class="fan-react" onclick="reactPost(this,'💬')">💬 8 Comments</div>
+          <div class="fan-react" onclick="reactPost(this,'🔁')">🔁 Share</div>
+        </div>
+      </div>
+      <div class="fan-post">
+        <div class="fan-post-header">
+          <div class="fan-av" style="background:#2a0a0a;color:#F09595">BN</div>
+          <div><div class="fan-author">Brian Nsubuga</div><div class="fan-date">May 25, 2025 · KISU Lions fan</div></div>
+        </div>
+        <p class="fan-content">The Taibah Spartanz vs KISU Lions 4-1 result still hurts. But we know what we're capable of. Ibra Mubiru hasn't forgotten that match. KISU in ISAL2 — watch this space. 🦁</p>
+        <div class="fan-reactions">
+          <div class="fan-react" onclick="reactPost(this,'🔥')">🔥 22</div>
+          <div class="fan-react" onclick="reactPost(this,'💬')">💬 5 Comments</div>
+          <div class="fan-react" onclick="reactPost(this,'🔁')">🔁 Share</div>
+        </div>
+      </div>
+      <div style="background:var(--card);border:0.5px solid var(--border);padding:20px;">
+        <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);margin-bottom:12px;">Share your thoughts</div>
+        <textarea class="modal-input" rows="3" placeholder="Write something about the league..." style="resize:none;width:100%;"></textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
+          <div style="font-size:11px;color:var(--dim);">Sign in to post</div>
+          <button class="btn-p" style="padding:9px 20px;font-size:11px;" onclick="showModal('login-modal')">Sign In to Post</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);margin-bottom:16px;">Fan Polls</div>
+      <div class="poll-card">
+        <div class="poll-title">Who wins ISAL2?</div>
+        <div class="poll-opt" onclick="vote(this,42)"><div class="poll-fill" style="width:42%"></div><div class="poll-text"><span>Harambe Stars</span><span class="poll-pct">42%</span></div></div>
+        <div class="poll-opt" onclick="vote(this,28)"><div class="poll-fill" style="width:28%"></div><div class="poll-text"><span>KISU Lions</span><span class="poll-pct">28%</span></div></div>
+        <div class="poll-opt" onclick="vote(this,18)"><div class="poll-fill" style="width:18%"></div><div class="poll-text"><span>Taibah Spartanz</span><span class="poll-pct">18%</span></div></div>
+        <div class="poll-opt" onclick="vote(this,12)"><div class="poll-fill" style="width:12%"></div><div class="poll-text"><span>Dark Horse</span><span class="poll-pct">12%</span></div></div>
+        <div style="font-size:11px;color:var(--dim);margin-top:12px;">214 votes</div>
+      </div>
+      <div class="poll-card">
+        <div class="poll-title">POTS — Player of the Season</div>
+        <div class="poll-opt" onclick="vote(this,35)"><div class="poll-fill" style="width:35%"></div><div class="poll-text"><span>Stefano Loro</span><span class="poll-pct">35%</span></div></div>
+        <div class="poll-opt" onclick="vote(this,33)"><div class="poll-fill" style="width:33%"></div><div class="poll-text"><span>Arafat Mugezi</span><span class="poll-pct">33%</span></div></div>
+        <div class="poll-opt" onclick="vote(this,20)"><div class="poll-fill" style="width:20%"></div><div class="poll-text"><span>Aqeel Parpia</span><span class="poll-pct">20%</span></div></div>
+        <div class="poll-opt" onclick="vote(this,12)"><div class="poll-fill" style="width:12%"></div><div class="poll-text"><span>Themba Nkesiga</span><span class="poll-pct">12%</span></div></div>
+        <div style="font-size:11px;color:var(--dim);margin-top:12px;">187 votes</div>
+      </div>
+      <div style="background:var(--card);border:0.5px solid var(--border);padding:24px;">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:12px;">ISAL2 Countdown</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--lime);line-height:1;" id="countdown">--</div>
+        <div style="font-size:11px;color:var(--dim);margin-top:6px;letter-spacing:1px;">DAYS UNTIL ISAL2 KICKOFF</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:12px;">July 4, 2025 · Legends Sports Grounds</div>
+      </div>
+    </div>
+  </div>
+  <footer><div class="ft-logo">I.S.A LEAGUE</div><div class="ft-text">© 2025 International Schools Alumni League</div><div class="ft-text">Fan Zone</div></footer>
+</div>
+
+<!-- =================== MERCH PAGE =================== -->
+<div id="page-merch" class="page">
+  <div class="page-hdr">
+    <div class="page-hdr-tag">Official Store</div>
+    <h2>ISA Merch</h2>
+    <p>Represent your league. Official ISA League merchandise — quality gear for the community.</p>
+  </div>
+  <div class="merch-grid">
+    <div class="merch-card">
+      <div class="merch-img"><div class="merch-icon">ISA</div><div class="merch-badge-merch">Bestseller</div></div>
+      <div class="merch-info">
+        <div class="merch-name">ISA League Classic Jersey</div>
+        <div class="merch-sub">Unisex · Sizes S–XXL · Black/Lime</div>
+        <div class="merch-price">UGX 85,000</div>
+        <button class="merch-btn" onclick="addToCart('ISA League Classic Jersey')">Add to Cart</button>
+      </div>
+    </div>
+    <div class="merch-card">
+      <div class="merch-img"><div class="merch-icon">CAP</div></div>
+      <div class="merch-info">
+        <div class="merch-name">ISA League Snapback Cap</div>
+        <div class="merch-sub">One Size · Adjustable · Black</div>
+        <div class="merch-price">UGX 45,000</div>
+        <button class="merch-btn" onclick="addToCart('ISA League Snapback Cap')">Add to Cart</button>
+      </div>
+    </div>
+    <div class="merch-card">
+      <div class="merch-img"><div class="merch-icon">TEE</div><div class="merch-badge-merch">New</div></div>
+      <div class="merch-info">
+        <div class="merch-name">ISAL2 Launch Tee</div>
+        <div class="merch-sub">Unisex · 100% Cotton · Black</div>
+        <div class="merch-price">UGX 55,000</div>
+        <button class="merch-btn" onclick="addToCart('ISAL2 Launch Tee')">Add to Cart</button>
+      </div>
+    </div>
+    <div class="merch-card">
+      <div class="merch-img"><div class="merch-icon">TRK</div></div>
+      <div class="merch-info">
+        <div class="merch-name">ISA Track Jacket</div>
+        <div class="merch-sub">Unisex · Zip-up · Black/Lime</div>
+        <div class="merch-price">UGX 120,000</div>
+        <button class="merch-btn" onclick="addToCart('ISA Track Jacket')">Add to Cart</button>
+      </div>
+    </div>
+    <div class="merch-card">
+      <div class="merch-img"><div class="merch-icon">SCF</div></div>
+      <div class="merch-info">
+        <div class="merch-name">ISA League Scarf</div>
+        <div class="merch-sub">One Size · Knit · Black & Lime</div>
+        <div class="merch-price">UGX 35,000</div>
+        <button class="merch-btn" onclick="addToCart('ISA League Scarf')">Add to Cart</button>
+      </div>
+    </div>
+    <div class="merch-card">
+      <div class="merch-img"><div class="merch-icon">MUG</div><div class="merch-badge-merch">Limited</div></div>
+      <div class="merch-info">
+        <div class="merch-name">ISAL1 Champions Mug</div>
+        <div class="merch-sub">Ceramic · 350ml · Collector's Edition</div>
+        <div class="merch-price">UGX 30,000</div>
+        <button class="merch-btn" onclick="addToCart('ISAL1 Champions Mug')">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div style="padding:32px 48px;border-top:0.5px solid var(--border);display:flex;align-items:center;gap:24px;">
+    <div style="font-size:11px;color:var(--dim);letter-spacing:1px;">🚚 Free delivery in Kampala on orders over UGX 100,000</div>
+    <div style="font-size:11px;color:var(--dim);letter-spacing:1px;">📦 Orders ship within 3–5 business days</div>
+    <div style="font-size:11px;color:var(--dim);letter-spacing:1px;">💳 Mobile Money · Bank Transfer · Cash on Delivery</div>
+  </div>
+  <footer><div class="ft-logo">I.S.A LEAGUE</div><div class="ft-text">© 2025 International Schools Alumni League</div><div class="ft-text">Official Merch Store</div></footer>
+</div>
+
+<!-- =================== ADMIN PAGE =================== -->
+<div id="page-admin" class="page" style="padding:0;">
+  <div class="admin-sidebar open">
+    <div class="admin-logo">ISA Admin</div>
+    <div class="admin-nav-item active" onclick="adminTab(this,'admin-overview')">Overview</div>
+    <div class="admin-nav-item" onclick="adminTab(this,'admin-matches')">Matches</div>
+    <div class="admin-nav-item" onclick="adminTab(this,'admin-players-admin')">Players</div>
+    <div class="admin-nav-item" onclick="adminTab(this,'admin-teams-admin')">Teams</div>
+    <div class="admin-nav-item" onclick="adminTab(this,'admin-media-admin')">Media</div>
+    <div style="flex:1"></div>
+    <div class="admin-nav-item" onclick="showPage('home')" style="color:rgba(200,245,66,.5)">← Back to Site</div>
+  </div>
+  <div class="admin-content">
+    <div id="admin-overview">
+      <div class="admin-header">
+        <div class="admin-title">Dashboard</div>
+        <button class="btn-p" style="padding:10px 22px;font-size:11px;" onclick="showModal('add-match-modal')">+ Add Match Result</button>
+      </div>
+      <div class="admin-grid">
+        <div class="admin-stat"><div class="admin-stat-n">12</div><div class="admin-stat-l">Teams Registered</div></div>
+        <div class="admin-stat"><div class="admin-stat-n">110</div><div class="admin-stat-l">Matches Logged</div></div>
+        <div class="admin-stat"><div class="admin-stat-n">48</div><div class="admin-stat-l">Players Tracked</div></div>
+        <div class="admin-stat"><div class="admin-stat-n">2</div><div class="admin-stat-l">Active Sponsors</div></div>
+      </div>
+      <div style="margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;">Recent Matches</div>
+        <button class="admin-action" onclick="showModal('add-match-modal')">+ Add Result</button>
+      </div>
+      <table class="admin-table">
+        <thead><tr><th>Match</th><th>Score</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>Harambe Stars vs Kabojja Blazers</td><td style="color:var(--lime);font-family:'Bebas Neue',sans-serif;font-size:16px;">2-0</td><td>Sep 14, 2024</td><td><span class="status-pill status-done">Completed</span></td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>KISU Lions vs ISU Leopards</td><td style="color:var(--lime);font-family:'Bebas Neue',sans-serif;font-size:16px;">3-0</td><td>Sep 14, 2024</td><td><span class="status-pill status-done">Completed</span></td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>AK Supa Strykaz vs Rainbow OG's</td><td style="color:var(--lime);font-family:'Bebas Neue',sans-serif;font-size:16px;">5-1</td><td>Sep 7, 2024</td><td><span class="status-pill status-done">Completed</span></td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>Harambe Stars vs WOLIS Saints</td><td style="color:var(--muted);font-size:13px;">TBD</td><td>Jul 4, 2025</td><td><span class="status-pill status-up">Upcoming</span></td><td><button class="admin-action">Edit</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="admin-matches" style="display:none">
+      <div class="admin-header">
+        <div class="admin-title">Matches</div>
+        <button class="btn-p" style="padding:10px 22px;font-size:11px;" onclick="showModal('add-match-modal')">+ Add Match</button>
+      </div>
+      <table class="admin-table">
+        <thead><tr><th>Home</th><th>Away</th><th>Score</th><th>Matchday</th><th>Season</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>Harambe Stars</td><td>Kabojja Blazers</td><td style="color:var(--lime);font-family:'Bebas Neue',sans-serif;">2-0</td><td>MD11</td><td>ISAL1</td><td><span class="status-pill status-done">Done</span></td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>KISU Lions</td><td>ISU Leopards</td><td style="color:var(--lime);font-family:'Bebas Neue',sans-serif;">3-0</td><td>MD1</td><td>ISAL1</td><td><span class="status-pill status-done">Done</span></td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>Taibah Spartanz</td><td>KISU Lions</td><td style="color:var(--lime);font-family:'Bebas Neue',sans-serif;">4-1</td><td>MD10</td><td>ISAL1</td><td><span class="status-pill status-done">Done</span></td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>AK Supa Strykaz</td><td>Rainbow OG's</td><td style="color:var(--lime);font-family:'Bebas Neue',sans-serif;">5-1</td><td>MD9</td><td>ISAL1</td><td><span class="status-pill status-done">Done</span></td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>Vienna Titans</td><td>Aga Khan 47z</td><td style="color:var(--muted);font-size:13px;">0-0</td><td>MD8</td><td>ISAL1</td><td><span class="status-pill status-done">Done</span></td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>Harambe Stars</td><td>WOLIS Saints</td><td style="color:var(--dim);">—</td><td>MD1</td><td>ISAL2</td><td><span class="status-pill status-up">Upcoming</span></td><td><button class="admin-action">Edit</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="admin-players-admin" style="display:none">
+      <div class="admin-header">
+        <div class="admin-title">Players</div>
+        <button class="btn-p" style="padding:10px 22px;font-size:11px;" onclick="showModal('add-player-modal')">+ Add Player</button>
+      </div>
+      <table class="admin-table">
+        <thead><tr><th>Player</th><th>Team</th><th>Goals</th><th>Assists</th><th>Clean Sheets</th><th>Cards</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>Themba Nkesiga</td><td>Taibah Olympians</td><td>7</td><td>0</td><td>—</td><td>0</td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>Arafat Mugezi</td><td>Taibah Spartanz</td><td>7</td><td>0</td><td>—</td><td>1Y</td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>Ibra Mubiru</td><td>KISU Lions</td><td>6</td><td>1</td><td>—</td><td>0</td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>Stefano Loro</td><td>ISU Leopards</td><td>2</td><td>9</td><td>—</td><td>2Y</td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>Lee Okot</td><td>AK Supa Strykaz</td><td>5</td><td>5</td><td>—</td><td>0</td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>Aqeel Parpia</td><td>Aga Khan 47z</td><td>—</td><td>—</td><td>6</td><td>0</td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>Jordan Bagambe</td><td>Harambe Stars</td><td>—</td><td>—</td><td>5</td><td>0</td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>Muhammed Ali</td><td>Tank Hill Titans</td><td>5</td><td>2</td><td>—</td><td>0</td><td><button class="admin-action">Edit</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="admin-teams-admin" style="display:none">
+      <div class="admin-header"><div class="admin-title">Teams</div><button class="btn-p" style="padding:10px 22px;font-size:11px;">+ Add Team</button></div>
+      <table class="admin-table">
+        <thead><tr><th>Team</th><th>Season</th><th>W</th><th>D</th><th>L</th><th>Pts</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>Harambe Stars</td><td>ISAL1</td><td>7</td><td>3</td><td>1</td><td>24</td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>KISU Lions</td><td>ISAL1</td><td>6</td><td>3</td><td>2</td><td>21</td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>Aga Khan 47z</td><td>ISAL1</td><td>6</td><td>2</td><td>3</td><td>20</td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>Taibah Spartanz</td><td>ISAL1</td><td>5</td><td>4</td><td>2</td><td>19</td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>Vienna Titans</td><td>ISAL1</td><td>4</td><td>5</td><td>2</td><td>17</td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>ISU Leopards</td><td>ISAL1</td><td>4</td><td>4</td><td>3</td><td>16</td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>WOLIS Saints</td><td>ISAL2</td><td>—</td><td>—</td><td>—</td><td>—</td><td><button class="admin-action">Edit</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="admin-media-admin" style="display:none">
+      <div class="admin-header"><div class="admin-title">Media</div><button class="btn-p" style="padding:10px 22px;font-size:11px;">+ New Article</button></div>
+      <table class="admin-table">
+        <thead><tr><th>Title</th><th>Category</th><th>Date</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>WOLIS Saints Join ISAL2</td><td>Expansion</td><td>May 29, 2025</td><td><span class="status-pill status-live">Published</span></td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>Best Players of ISAL1</td><td>Stats</td><td>May 1, 2025</td><td><span class="status-pill status-live">Published</span></td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>ISA x Lock & Key Partnership</td><td>Partners</td><td>Apr 26, 2025</td><td><span class="status-pill status-live">Published</span></td><td><button class="admin-action">Edit</button></td></tr>
+          <tr><td>JIBU Official Hydration Partner</td><td>Partners</td><td>Apr 25, 2025</td><td><span class="status-pill status-live">Published</span></td><td><button class="admin-action">Edit</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-bg" id="login-modal" onclick="closeModalBg(event,'login-modal')">
+  <div class="modal">
+    <div class="modal-title">Sign In</div>
+    <div class="modal-field"><label class="modal-label">Email</label><input class="modal-input" type="email" placeholder="you@example.com"/></div>
+    <div class="modal-field"><label class="modal-label">Password</label><input class="modal-input" type="password" placeholder="••••••••"/></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('login-modal')">Cancel</button>
+      <button class="modal-submit" onclick="closeModal('login-modal')">Sign In</button>
+    </div>
+    <div style="margin-top:16px;font-size:12px;color:var(--dim);text-align:center;">Don't have an account? <span style="color:var(--lime);cursor:pointer;">Create fan account</span></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="add-match-modal" onclick="closeModalBg(event,'add-match-modal')">
+  <div class="modal">
+    <div class="modal-title">Add Match Result</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="modal-field"><label class="modal-label">Home Team</label><select class="modal-input"><option>Harambe Stars</option><option>KISU Lions</option><option>Aga Khan 47z</option><option>Taibah Spartanz</option><option>Vienna Titans</option><option>ISU Leopards</option><option>AK Supa Strykaz</option><option>Tank Hill Titans</option><option>Taibah Olympians</option><option>Kabojja Blazers</option><option>Rainbow OG's</option><option>WOLIS Saints</option></select></div>
+      <div class="modal-field"><label class="modal-label">Away Team</label><select class="modal-input"><option>KISU Lions</option><option>Harambe Stars</option><option>Aga Khan 47z</option><option>Taibah Spartanz</option><option>Vienna Titans</option><option>ISU Leopards</option></select></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="modal-field"><label class="modal-label">Home Score</label><input class="modal-input" type="number" min="0" placeholder="0"/></div>
+      <div class="modal-field"><label class="modal-label">Away Score</label><input class="modal-input" type="number" min="0" placeholder="0"/></div>
+    </div>
+    <div class="modal-field"><label class="modal-label">Match Date</label><input class="modal-input" type="date"/></div>
+    <div class="modal-field"><label class="modal-label">Matchday</label><input class="modal-input" placeholder="e.g. MD1"/></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('add-match-modal')">Cancel</button>
+      <button class="modal-submit" onclick="saveMatch()">Save Result</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="add-player-modal" onclick="closeModalBg(event,'add-player-modal')">
+  <div class="modal">
+    <div class="modal-title">Add / Edit Player</div>
+    <div class="modal-field"><label class="modal-label">Full Name</label><input class="modal-input" placeholder="Player name"/></div>
+    <div class="modal-field"><label class="modal-label">Team</label><select class="modal-input"><option>Harambe Stars</option><option>KISU Lions</option><option>Aga Khan 47z</option><option>Taibah Spartanz</option></select></div>
+    <div class="modal-field"><label class="modal-label">Position</label><select class="modal-input"><option>Goalkeeper</option><option>Defender</option><option>Midfielder</option><option>Forward</option></select></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+      <div class="modal-field"><label class="modal-label">Goals</label><input class="modal-input" type="number" min="0" value="0"/></div>
+      <div class="modal-field"><label class="modal-label">Assists</label><input class="modal-input" type="number" min="0" value="0"/></div>
+      <div class="modal-field"><label class="modal-label">Clean Sheets</label><input class="modal-input" type="number" min="0" value="0"/></div>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('add-player-modal')">Cancel</button>
+      <button class="modal-submit" onclick="closeModal('add-player-modal')">Save Player</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DATA =====
+const teams = [
+  {id:'harambe',name:'Harambe Stars',abbr:'HS',color:'#1a2a0a',tc:'#C8F542',pos:1,w:7,d:3,l:1,gf:20,ga:6,gd:14,pts:24,form:['w','w','d','w','w'],season:'ISAL1',players:['Joel Ssengendo','Richard Kayima','Jordan Bagambe','Eddy Muleme','David Tombe']},
+  {id:'kisu',name:'KISU Lions',abbr:'KL',color:'#0a1a2a',tc:'#85B7EB',pos:2,w:6,d:3,l:2,gf:18,ga:10,gd:8,pts:21,form:['w','d','w','l','w'],season:'ISAL1',players:['Ibra Mubiru','Brian Rwehumbiza']},
+  {id:'ak47',name:'Aga Khan 47z',abbr:'AK47',color:'#1a0a2a',tc:'#AFA9EC',pos:3,w:6,d:2,l:3,gf:12,ga:6,gd:6,pts:20,form:['w','w','d','l','w'],season:'ISAL1',players:['Aqeel Parpia']},
+  {id:'spartanz',name:'Taibah Spartanz',abbr:'TS',color:'#2a0a0a',tc:'#F09595',pos:4,w:5,d:4,l:2,gf:24,ga:13,gd:11,pts:19,form:['d','w','w','d','w'],season:'ISAL1',players:['Arafat Mugezi','Muhammad Kakooza']},
+  {id:'vienna',name:'Vienna Titans',abbr:'VT',color:'#0a1a1a',tc:'#5DCAA5',pos:5,w:4,d:5,l:2,gf:14,ga:12,gd:2,pts:17,form:['d','w','d','w','d'],season:'ISAL1',players:['Trevor Zziwa','Chisamo Elisha']},
+  {id:'isu',name:'ISU Leopards',abbr:'IL',color:'#1a1a0a',tc:'#EF9F27',pos:6,w:4,d:4,l:3,gf:16,ga:13,gd:3,pts:16,form:['w','l','d','w','w'],season:'ISAL1',players:['Stefano Loro','Amani Tindyebwa','Robert Mande']},
+  {id:'strykaz',name:'Aga Khan Supa Strykaz',abbr:'AKS',color:'#1a0a1a',tc:'#ED93B1',pos:7,w:5,d:1,l:5,gf:18,ga:21,gd:-3,pts:16,form:['l','w','l','w','l'],season:'ISAL1',players:['Lee Okot','Andrew Gagga']},
+  {id:'tankhil',name:'Tank Hill Titans',abbr:'THT',color:'#0a0a1a',tc:'#85B7EB',pos:8,w:3,d:5,l:3,gf:15,ga:16,gd:-1,pts:13,form:['d','l','d','w','d'],season:'ISAL1',players:['Muhammed Ali']},
+  {id:'olympians',name:'Taibah Olympians',abbr:'TO',color:'#1a1a0a',tc:'#FAC775',pos:9,w:3,d:3,l:5,gf:14,ga:17,gd:-3,pts:12,form:['l','d','w','l','l'],season:'ISAL1',players:['Themba Nkesiga','Ignatius Nkesiga']},
+  {id:'kabojja',name:'Kabojja Blazers',abbr:'KB',color:'#0a1a0a',tc:'#9FE1CB',pos:10,w:2,d:3,l:6,gf:10,ga:18,gd:-8,pts:9,form:['l','l','d','l','w'],season:'ISAL1',players:[]},
+  {id:'rainbow',name:"Rainbow OG's",abbr:'ROG',color:'#1a0a0a',tc:'#F09595',pos:11,w:1,d:2,l:8,gf:8,ga:27,gd:-19,pts:5,form:['l','l','l','d','l'],season:'ISAL1',players:['Ronald (OG)']},
+  {id:'wolis',name:'WOLIS Saints',abbr:'WS',color:'#0a0a2a',tc:'#B5D4F4',pos:'—',w:'—',d:'—',l:'—',gf:'—',ga:'—',gd:'—',pts:'—',form:[],season:'ISAL2 — New',players:['Masiko Niwagaba']},
+];
+
+const players = [
+  {id:'themba',name:'Themba Nkesiga',initials:'TN',team:'Taibah Olympians',pos:'Forward',goals:7,assists:0,cs:0,yc:0,rc:0,color:'#1a1a0a',tc:'#FAC775'},
+  {id:'mugezi',name:'Arafat Mugezi',initials:'AM',team:'Taibah Spartanz',pos:'Forward',goals:7,assists:0,cs:0,yc:1,rc:0,color:'#2a0a0a',tc:'#F09595'},
+  {id:'mubiru',name:'Ibra Mubiru',initials:'IM',team:'KISU Lions',pos:'Forward',goals:6,assists:1,cs:0,yc:0,rc:0,color:'#0a1a2a',tc:'#85B7EB'},
+  {id:'lee',name:'Lee Okot',initials:'LO',team:'AK Supa Strykaz',pos:'Midfielder',goals:5,assists:5,cs:0,yc:0,rc:0,color:'#1a0a1a',tc:'#ED93B1'},
+  {id:'trevor',name:'Trevor Zziwa',initials:'TZ',team:'Vienna Titans',pos:'Forward',goals:5,assists:1,cs:0,yc:0,rc:0,color:'#0a1a1a',tc:'#5DCAA5'},
+  {id:'ali',name:'Muhammed Ali',initials:'MA',team:'Tank Hill Titans',pos:'Midfielder',goals:5,assists:2,cs:0,yc:0,rc:0,color:'#0a0a1a',tc:'#85B7EB'},
+  {id:'gagga',name:'Andrew Gagga',initials:'AG',team:'AK Supa Strykaz',pos:'Forward',goals:5,assists:0,cs:0,yc:0,rc:0,color:'#1a0a1a',tc:'#ED93B1'},
+  {id:'joel',name:'Joel Ssengendo',initials:'JS',team:'Harambe Stars',pos:'Forward',goals:4,assists:0,cs:0,yc:0,rc:0,color:'#1a2a0a',tc:'#C8F542'},
+  {id:'eddy',name:'Eddy Muleme',initials:'EM',team:'Harambe Stars',pos:'Midfielder',goals:2,assists:0,cs:0,yc:0,rc:1,color:'#1a2a0a',tc:'#C8F542'},
+  {id:'stefano',name:'Stefano Loro',initials:'SL',team:'ISU Leopards',pos:'Midfielder',goals:2,assists:9,cs:0,yc:2,rc:0,color:'#1a1a0a',tc:'#EF9F27'},
+  {id:'brian',name:'Brian Rwehumbiza',initials:'BR',team:'KISU Lions',pos:'Midfielder',goals:3,assists:3,cs:0,yc:0,rc:0,color:'#0a1a2a',tc:'#85B7EB'},
+  {id:'kakooza',name:'Muhammad Kakooza',initials:'MK',team:'Taibah Spartanz',pos:'Midfielder',goals:1,assists:3,cs:0,yc:0,rc:0,color:'#2a0a0a',tc:'#F09595'},
+  {id:'richard',name:'Richard Kayima',initials:'RK',team:'Harambe Stars',pos:'Midfielder',goals:1,assists:3,cs:0,yc:1,rc:0,color:'#1a2a0a',tc:'#C8F542'},
+  {id:'aqeel',name:'Aqeel Parpia',initials:'AP',team:'Aga Khan 47z',pos:'Goalkeeper',goals:0,assists:0,cs:6,yc:0,rc:0,color:'#1a0a2a',tc:'#AFA9EC'},
+  {id:'jordan',name:'Jordan Bagambe',initials:'JB',team:'Harambe Stars',pos:'Goalkeeper',goals:0,assists:0,cs:5,yc:0,rc:0,color:'#1a2a0a',tc:'#C8F542'},
+  {id:'chisamo',name:'Chisamo Elisha',initials:'CE',team:'Vienna Titans',pos:'Goalkeeper',goals:0,assists:0,cs:5,yc:0,rc:0,color:'#0a1a1a',tc:'#5DCAA5'},
+  {id:'robert',name:'Robert Mande',initials:'RM',team:'ISU Leopards',pos:'Goalkeeper',goals:0,assists:0,cs:3,yc:0,rc:0,color:'#1a1a0a',tc:'#EF9F27'},
+];
+
+const fixtures = [
+  {md:'Match Day 1',matches:[
+    {home:'KISU Lions',away:'ISU Leopards',score:'3-0',date:'Jun 15, 2024'},
+    {home:'Harambe Stars',away:'Kabojja Blazers',score:'2-0',date:'Jun 15, 2024'},
+    {home:'Aga Khan 47z',away:'Taibah Spartanz',score:'1-0',date:'Jun 15, 2024'},
+    {home:'Vienna Titans',away:'Rainbow OG\'s',score:'3-1',date:'Jun 15, 2024'},
+  ]},
+  {md:'Match Day 2',matches:[
+    {home:'Taibah Olympians',away:'Rainbow OG\'s',score:'4-0',date:'Jun 22, 2024'},
+    {home:'ISU Leopards',away:'Kabojja Blazers',score:'4-1',date:'Jun 22, 2024'},
+    {home:'Harambe Stars',away:'KISU Lions',score:'1-1',date:'Jun 22, 2024'},
+  ]},
+  {md:'Match Day 4',matches:[
+    {home:'Vienna Titans',away:'Aga Khan Supa Strykaz',score:'1-0',date:'Jul 13, 2024'},
+    {home:'KISU Lions',away:'Taibah Spartanz',score:'0-1',date:'Jul 13, 2024'},
+  ]},
+  {md:'Match Day 8',matches:[
+    {home:'Aga Khan Supa Strykaz',away:'Taibah Spartanz',score:'2-1',date:'Aug 17, 2024'},
+    {home:'Vienna Titans',away:'Aga Khan 47z',score:'0-0',date:'Aug 17, 2024'},
+    {home:'Tank Hill Titans',away:'Kabojja Blazers',score:'2-1',date:'Aug 17, 2024'},
+  ]},
+  {md:'Match Day 9',matches:[
+    {home:'Aga Khan Supa Strykaz',away:'Rainbow OG\'s',score:'5-1',date:'Aug 24, 2024'},
+    {home:'Harambe Stars',away:'ISU Leopards',score:'2-0',date:'Aug 24, 2024'},
+  ]},
+  {md:'Match Day 10',matches:[
+    {home:'Taibah Spartanz',away:'KISU Lions',score:'4-1',date:'Aug 31, 2024'},
+    {home:'Vienna Titans',away:'Tank Hill Titans',score:'1-1',date:'Aug 31, 2024'},
+  ]},
+  {md:'Match Day 11 (Final)',matches:[
+    {home:'Harambe Stars',away:'Kabojja Blazers',score:'2-0',date:'Sep 14, 2024'},
+    {home:'KISU Lions',away:'ISU Leopards',score:'3-0',date:'Sep 14, 2024'},
+    {home:'Aga Khan 47z',away:'Rainbow OG\'s',score:'3-0',date:'Sep 14, 2024'},
+  ]},
+  {md:'ISAL2 — Match Day 1',matches:[
+    {home:'Harambe Stars',away:'WOLIS Saints',score:'',date:'Jul 4, 2025'},
+    {home:'KISU Lions',away:'Taibah Spartanz',score:'',date:'Jul 4, 2025'},
+    {home:'Aga Khan 47z',away:'Vienna Titans',score:'',date:'Jul 4, 2025'},
+    {home:'ISU Leopards',away:'Tank Hill Titans',score:'',date:'Jul 4, 2025'},
+  ]},
+];
+
+// ===== RENDER STANDINGS =====
+function renderStandings(tableId, limit){
+  const el = document.getElementById(tableId);
+  if(!el) return;
+  const t = limit ? teams.slice(0,limit) : teams;
+  let html = `<thead><tr><th>#</th><th>Club</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th><th>Form</th></tr></thead><tbody>`;
+  t.forEach((tm,i)=>{
+    const posClass = i===0?'gold':i===1?'silver':i===2?'bronze':'';
+    const gd = typeof tm.gd==='number'?(tm.gd>0?`<span class="gd-p">+${tm.gd}</span>`:tm.gd<0?`<span class="gd-n">${tm.gd}</span>`:`<span class="gd-z">0</span>`):tm.gd;
+    const formDots = tm.form.map(f=>`<div class="fd ${f==='w'?'fw':f==='l'?'fl':'fdraw'}"></div>`).join('');
+    html+=`<tr onclick="showTeamDetail('${tm.id}')" style="cursor:pointer">
+      <td class="pos ${posClass}">${tm.pos}</td>
+      <td><div class="team-cell"><div class="badge" style="background:${tm.color};color:${tm.tc}">${tm.abbr}</div><span class="tname">${tm.name}</span></div></td>
+      <td>${tm.w}</td><td>${tm.d}</td><td>${tm.l}</td><td>${tm.gf}</td><td>${tm.ga}</td><td>${gd}</td>
+      <td class="pts">${tm.pts}</td>
+      <td><div class="form-row">${formDots}</div></td>
+    </tr>`;
+  });
+  html+='</tbody>';
+  el.innerHTML=html;
+}
+
+// ===== RENDER FIXTURES =====
+function renderFixtures(){
+  const el = document.getElementById('fixtures-list');
+  if(!el) return;
+  let html='';
+  fixtures.forEach(group=>{
+    html+=`<div class="fixture-group"><div class="matchday-label">${group.md}</div>`;
+    group.matches.forEach(m=>{
+      const homeTeam = teams.find(t=>t.name===m.home)||{abbr:m.home.slice(0,2),color:'#1a1a1a',tc:'#888'};
+      const awayTeam = teams.find(t=>t.name===m.away)||{abbr:m.away.slice(0,2),color:'#1a1a1a',tc:'#888'};
+      const scored = m.score!=='';
+      html+=`<div class="fixture-row" onclick="${scored?"showMatch('"+m.home+"','"+m.away+"','"+m.score+"','"+m.date+"')":''}" style="${scored?'cursor:pointer':''}">
+        <div class="fix-team">
+          <div class="badge" style="background:${homeTeam.color};color:${homeTeam.tc}">${homeTeam.abbr||m.home.slice(0,3)}</div>
+          <span class="fix-name">${m.home}</span>
+        </div>
+        <div class="${scored?'fix-score':'fix-score upcoming'}">${scored?m.score:'VS'}</div>
+        <div class="fix-team away">
+          <div class="badge" style="background:${awayTeam.color};color:${awayTeam.tc}">${awayTeam.abbr||m.away.slice(0,3)}</div>
+          <span class="fix-name">${m.away}</span>
+        </div>
+        <div class="fix-date">${m.date}</div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
+
+// ===== RENDER TEAMS GRID =====
+function renderTeamsGrid(){
+  const el = document.getElementById('teams-grid');
+  if(!el) return;
+  let html='';
+  teams.forEach(tm=>{
+    html+=`<div class="team-card" onclick="showTeamDetail('${tm.id}')">
+      <div class="tc-pos">${tm.pos}</div>
+      <div class="tc-badge" style="background:${tm.color};color:${tm.tc}">${tm.abbr}</div>
+      <div class="tc-name">${tm.name}</div>
+      <div class="tc-sub">${tm.season}</div>
+      <div class="tc-stats">
+        <div class="tc-stat"><div class="tc-stat-n">${tm.pts}</div><div class="tc-stat-l">Pts</div></div>
+        <div class="tc-stat"><div class="tc-stat-n">${tm.w}</div><div class="tc-stat-l">Wins</div></div>
+        <div class="tc-stat"><div class="tc-stat-n">${tm.gd==='—'?'—':(tm.gd>0?'+':'')+tm.gd}</div><div class="tc-stat-l">GD</div></div>
+      </div>
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+
+// ===== TEAM DETAIL =====
+function showTeamDetail(id){
+  const tm = teams.find(t=>t.id===id);
+  if(!tm) return;
+  const formDots = tm.form.map(f=>`<div class="fd" style="width:12px;height:12px;${f==='w'?'background:#C8F542':f==='l'?'background:#E24B4A':'background:rgba(240,237,230,.3)'}"></div>`).join('');
+  const playersList = tm.players.length?tm.players.map(p=>`<div style="padding:12px 0;border-bottom:0.5px solid rgba(240,237,230,.04);font-size:13px;color:var(--muted)">${p}</div>`).join(''):'<div style="color:var(--dim);font-size:13px;">Roster details coming soon</div>';
+  document.getElementById('team-detail-content').innerHTML=`
+    <div class="page-hdr" style="display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center">
+      <div class="match-badge" style="width:100px;height:100px;font-size:28px;background:${tm.color};color:${tm.tc}">${tm.abbr}</div>
+      <div>
+        <div class="page-hdr-tag">${tm.season}</div>
+        <h2>${tm.name}</h2>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:12px">${formDots}<span style="font-size:11px;color:var(--dim);margin-left:6px">Recent Form</span></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);margin-bottom:1px">
+      ${[['Pts',tm.pts],['Wins',tm.w],['Draws',tm.d],['Losses',tm.l],['GD',typeof tm.gd==='number'?(tm.gd>0?'+':'')+tm.gd:tm.gd]].map(([l,v])=>`<div class="h-stat"><div class="h-stat-n">${v}</div><div class="h-stat-l">${l}</div></div>`).join('')}
+    </div>
+    <div class="section">
+      <div class="sec-title" style="font-size:22px;margin-bottom:20px">Squad</div>
+      ${playersList}
+    </div>
+    <div class="section" style="padding-top:0">
+      <button class="btn-g" onclick="showPage('teams')" style="margin-bottom:0">← All Teams</button>
+    </div>`;
+  showPage('team-detail');
+}
+
+// ===== PLAYER TABLES =====
+function renderPlayers(){
+  renderPlayerTab('tab-goals',[...players].sort((a,b)=>b.goals-a.goals),'goals');
+  renderPlayerTab('tab-assists',[...players].sort((a,b)=>b.assists-a.assists),'assists');
+  renderPlayerTab('tab-cs',[...players].filter(p=>p.cs>0).sort((a,b)=>b.cs-a.cs),'cs');
+  renderPlayerTab('tab-all',players,'all');
+}
+
+function renderPlayerTab(tabId, list, mode){
+  const el = document.getElementById(tabId);
+  if(!el) return;
+  const header = `<div class="player-row header">
+    <span>#</span><span>Player</span><span style="text-align:center">Team</span>
+    <span style="text-align:center">Goals</span><span style="text-align:center">Assists</span><span style="text-align:center">CS</span><span style="text-align:center">Cards</span>
+  </div>`;
+  let html = header;
+  list.forEach((p,i)=>{
+    const hi = mode==='goals'?'goals':mode==='assists'?'assists':mode==='cs'?'cs':'goals';
+    html+=`<div class="player-row" onclick="showPlayerProfile('${p.id}')">
+      <div class="pr-rank">${i+1}</div>
+      <div class="pr-info">
+        <div class="pr-av" style="background:${p.color};color:${p.tc}">${p.initials}</div>
+        <div><div class="pr-name">${p.name}</div><div class="pr-team">${p.pos}</div></div>
+      </div>
+      <div class="pr-stat" style="font-size:12px;color:var(--muted)">${p.team}</div>
+      <div class="pr-stat ${mode==='goals'?'hi':''}">${p.goals}</div>
+      <div class="pr-stat ${mode==='assists'?'hi':''}">${p.assists}</div>
+      <div class="pr-stat ${mode==='cs'?'hi':''}">${p.cs}</div>
+      <div class="pr-stat" style="font-size:13px;color:var(--muted)">${p.yc>0?p.yc+'Y ':''} ${p.rc>0?p.rc+'R':''}</div>
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+
+function showPlayerProfile(id){
+  const p = players.find(pl=>pl.id===id);
+  if(!p) return;
+  document.getElementById('player-profile-content').innerHTML=`
+    <div class="player-hero">
+      <div class="player-av" style="background:${p.color};color:${p.tc}">${p.initials}</div>
+      <div>
+        <div class="player-pos-badge">${p.pos}</div>
+        <div class="player-name">${p.name}</div>
+        <div class="player-team">${p.team} · ISAL1</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:8px">Season Stats</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--muted)">${p.yc} Yellow · ${p.rc} Red</div>
+      </div>
+    </div>
+    <div class="player-stats-row">
+      <div class="ps"><div class="ps-n">${p.goals}</div><div class="ps-l">Goals</div></div>
+      <div class="ps"><div class="ps-n">${p.assists}</div><div class="ps-l">Assists</div></div>
+      <div class="ps"><div class="ps-n">${p.cs}</div><div class="ps-l">Clean Sheets</div></div>
+      <div class="ps"><div class="ps-n">${p.goals+p.assists}</div><div class="ps-l">Goal Contributions</div></div>
+    </div>
+    <div class="section">
+      <div class="sec-title" style="font-size:22px;margin-bottom:20px">About</div>
+      <p style="font-size:14px;line-height:1.75;color:var(--muted);max-width:600px;font-weight:300">${getPlayerBio(p)}</p>
+      <div style="margin-top:28px">
+        <button class="btn-g" onclick="showPage('players')" style="margin-right:12px">← All Players</button>
+        <button class="btn-g" onclick="showTeamDetail('${teams.find(t=>t.name===p.team)?.id||'harambe'}')">View Team</button>
+      </div>
+    </div>`;
+  showPage('player-profile');
+}
+
+function getPlayerBio(p){
+  const bios={
+    'stefano':'Stefano Loro was the creative engine of ISU Leopards in ISAL1. His 9 assists made him the outright assist king of the season, combining vision, technique and work rate to unlock defences across the league. Despite his team finishing 6th, Loro\'s individual performance was top-tier.',
+    'themba':'Themba Nkesiga led the golden boot race with 7 goals, all the more impressive given Taibah Olympians finished 9th. His ability to score in big moments — including a haul in the 4-0 win over Rainbow OG\'s — made him one of the most feared forwards in the league.',
+    'mugezi':'Arafat Mugezi powered Taibah Spartanz to 4th place with 7 goals and fierce leadership. His performance in the 4-1 dismantling of KISU Lions on Matchday 10 stood as one of the defining individual displays of ISAL1.',
+    'aqeel':'Aqeel Parpia was the backbone of Aga Khan 47z\'s defensive excellence, posting 6 clean sheets — the most of any goalkeeper in ISAL1. His work underpinned the league\'s best defensive record, conceding only 6 goals all season.',
+    'jordan':'Jordan Bagambe was a critical component of Harambe Stars\' title-winning campaign. His 5 clean sheets and resilient performances helped limit the champions to just 6 goals conceded — a record that shaped their destiny.',
+    'default':`A key player for ${p.team} throughout the ISAL1 campaign, contributing consistently across the season with ${p.goals} goals and ${p.assists} assists.`
+  };
+  return bios[p.id]||bios['default'];
+}
+
+// ===== MATCH PAGE =====
+function showMatch(home, away, score, date){
+  const [hg,ag] = score.split('-').map(Number);
+  const homeT = teams.find(t=>t.name===home)||{abbr:'H',color:'#111',tc:'#888'};
+  const awayT = teams.find(t=>t.name===away)||{abbr:'A',color:'#111',tc:'#888'};
+  document.getElementById('match-content').innerHTML=`
+    <div class="match-hero">
+      <div class="match-teams">
+        <div class="match-team">
+          <div class="match-badge" style="background:${homeT.color};color:${homeT.tc}">${homeT.abbr}</div>
+          <div class="match-tname">${home}</div>
+        </div>
+        <div>
+          <div class="match-score">${score}</div>
+          <div class="match-info">Full Time · ${date} · Legends Sports Grounds</div>
+        </div>
+        <div class="match-team">
+          <div class="match-badge" style="background:${awayT.color};color:${awayT.tc}">${awayT.abbr}</div>
+          <div class="match-tname">${away}</div>
+        </div>
+      </div>
+    </div>
+    <div class="match-body">
+      <div>
+        <div class="sec-title" style="font-size:22px;margin-bottom:16px">Match Events</div>
+        <div class="events-list">
+          ${generateEvents(home,away,hg,ag)}
+        </div>
+        <div style="margin-top:24px"><button class="btn-g" onclick="showPage('league')">← Back to League</button></div>
+      </div>
+      <div class="match-stats-panel">
+        <div class="ms-title">Match Stats</div>
+        ${renderMatchStat('Possession','54%','46%',54)}
+        ${renderMatchStat('Shots on Target',hg+2,ag+1,Math.round((hg+2)/(hg+ag+3)*100))}
+        ${renderMatchStat('Corners',hg+3,ag+2,Math.round((hg+3)/(hg+ag+5)*100))}
+        ${renderMatchStat('Fouls',ag+4,hg+3,Math.round((ag+4)/(hg+ag+7)*100))}
+        ${renderMatchStat('Yellow Cards',hg>2?1:0,ag>2?1:0,50)}
+      </div>
+    </div>`;
+  showPage('match');
+}
+
+function generateEvents(home,away,hg,ag){
+  const homeMinutes=[18,34,67].slice(0,hg);
+  const awayMinutes=[25,52,78].slice(0,ag);
+  const allEvents=[];
+  const homePlayers=teams.find(t=>t.name===home)?.players||['Player'];
+  const awayPlayers=teams.find(t=>t.name===away)?.players||['Player'];
+  homeMinutes.forEach((m,i)=>allEvents.push({min:m,team:'home',player:homePlayers[i%homePlayers.length]||'Player',type:'Goal ⚽'}));
+  awayMinutes.forEach((m,i)=>allEvents.push({min:m,team:'away',player:awayPlayers[i%awayPlayers.length]||'Player',type:'Goal ⚽'}));
+  allEvents.sort((a,b)=>a.min-b.min);
+  if(!allEvents.length) return '<div style="color:var(--dim);font-size:13px;padding:16px 0">No goals scored</div>';
+  return allEvents.map(e=>`<div class="event-item">
+    <div class="event-min">${e.min}'</div>
+    <div class="event-detail">
+      <div class="event-player">${e.player}</div>
+      <div class="event-type">${e.type} · ${e.team==='home'?home:away}</div>
+    </div>
+  </div>`).join('');
+}
+
+function renderMatchStat(label,home,away,homePct){
+  return `<div class="ms-row">
+    <div class="ms-labels"><span>${home}</span><span style="color:var(--dim)">${label}</span><span>${away}</span></div>
+    <div class="ms-bar">
+      <div class="ms-fill-home" style="width:${homePct}%"></div>
+      <div class="ms-fill-away" style="width:${100-homePct}%"></div>
+    </div>
+  </div>`;
+}
+
+// ===== NAVIGATION =====
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  const pg = document.getElementById('page-'+name);
+  if(pg) pg.classList.add('active');
+  const nav = document.getElementById('nav-'+name);
+  if(nav) nav.classList.add('active');
+  window.scrollTo(0,0);
+  if(name==='admin'){
+    document.getElementById('main-nav').style.display='none';
+    document.querySelector('.ticker').style.display='none';
+  } else {
+    document.getElementById('main-nav').style.display='flex';
+    document.querySelector('.ticker').style.display='flex';
+  }
+}
+
+function switchTab(el, tabId){
+  document.querySelectorAll('#page-league .tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('standings-tab').style.display='none';
+  document.getElementById('fixtures-tab').style.display='none';
+  document.getElementById(tabId).style.display='block';
+}
+
+function switchPlayerTab(el, tabId){
+  document.querySelectorAll('#page-players .tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  ['tab-goals','tab-assists','tab-cs','tab-all'].forEach(id=>{
+    const el2=document.getElementById(id);
+    if(el2) el2.style.display='none';
+  });
+  const target=document.getElementById(tabId);
+  if(target) target.style.display='grid';
+}
+
+function adminTab(el, tabId){
+  document.querySelectorAll('.admin-nav-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  ['admin-overview','admin-matches','admin-players-admin','admin-teams-admin','admin-media-admin'].forEach(id=>{
+    const e=document.getElementById(id);
+    if(e) e.style.display='none';
+  });
+  const target=document.getElementById(tabId);
+  if(target) target.style.display='block';
+}
+
+// ===== MODALS =====
+function showModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function closeModalBg(e,id){ if(e.target===document.getElementById(id)) closeModal(id); }
+function saveMatch(){ closeModal('add-match-modal'); showToast('Match result saved successfully'); }
+
+// ===== TOAST =====
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ===== MERCH =====
+function addToCart(item){ showToast(`${item} added to cart`); }
+
+// ===== FAN ZONE =====
+function reactPost(el, type){ showToast('Reaction added! Sign in to save.'); }
+function vote(el, pct){ showToast('Sign in to vote in polls'); }
+
+// ===== ARTICLE MODAL =====
+function openArticle(slug){ showToast('Opening article... Sign in to comment'); }
+
+// ===== COUNTDOWN =====
+function updateCountdown(){
+  const target = new Date('2025-07-04');
+  const now = new Date();
+  const diff = Math.ceil((target-now)/(1000*60*60*24));
+  const el = document.getElementById('countdown');
+  if(el) el.textContent = diff > 0 ? diff : 'LIVE';
+}
+
+// ===== INIT =====
+renderStandings('home-standings', 8);
+renderStandings('full-standings');
+renderFixtures();
+renderTeamsGrid();
+renderPlayers();
+updateCountdown();
+setInterval(updateCountdown, 60000);
+</script>
+</body>
+</html>
