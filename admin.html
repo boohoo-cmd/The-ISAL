@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ISA League — Admin</title>
+<!-- No indexing — keep this page off search engines -->
+<meta name="robots" content="noindex, nofollow"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --lime:#C8F542;
+  --dark:#0a0a0a;
+  --card:#111111;
+  --border:rgba(240,237,230,0.08);
+  --text:#f0ede6;
+  --muted:rgba(240,237,230,0.45);
+  --dim:rgba(240,237,230,0.2);
+  --red:#E24B4A;
+}
+body{background:var(--dark);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;}
+
+/* LOGIN SCREEN */
+#login-screen{
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;
+  background:var(--dark);
+  position:fixed;inset:0;z-index:9999;
+}
+#login-screen::before{
+  content:'ADMIN';
+  position:absolute;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:300px;
+  color:rgba(200,245,66,0.02);
+  pointer-events:none;
+  user-select:none;
+}
+.login-box{
+  width:400px;
+  border:0.5px solid var(--border);
+  padding:48px 40px;
+  background:#0d0d0d;
+  position:relative;
+}
+.login-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:20px;letter-spacing:4px;color:var(--lime);
+  margin-bottom:8px;
+}
+.login-sub{
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);
+  margin-bottom:36px;
+}
+.login-field{margin-bottom:18px;}
+.login-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:7px;}
+.login-input{
+  width:100%;background:var(--dark);border:0.5px solid rgba(240,237,230,.15);
+  color:var(--text);padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:14px;
+  outline:none;transition:border-color .2s;
+}
+.login-input:focus{border-color:rgba(200,245,66,.4);}
+.login-btn{
+  width:100%;background:var(--lime);border:none;color:var(--dark);
+  padding:14px;font-family:'DM Sans',sans-serif;font-size:12px;
+  letter-spacing:2px;text-transform:uppercase;font-weight:500;
+  cursor:pointer;margin-top:8px;transition:opacity .2s;
+}
+.login-btn:hover{opacity:.85;}
+.login-error{
+  font-size:12px;color:var(--red);margin-top:12px;
+  display:none;letter-spacing:.5px;
+}
+.login-attempts{
+  font-size:11px;color:var(--dim);margin-top:16px;text-align:center;
+}
+
+/* ADMIN SHELL — hidden until login */
+#admin-shell{display:none;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{
+  width:220px;background:#0d0d0d;border-right:0.5px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;padding:0;
+  display:flex;flex-direction:column;z-index:100;
+}
+.sidebar-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;
+  color:var(--lime);padding:24px 20px 20px;border-bottom:0.5px solid var(--border);
+}
+.sidebar-season{
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--dim);padding:0 20px 20px;margin-top:-12px;
+  border-bottom:0.5px solid var(--border);
+}
+.nav-item{
+  padding:13px 20px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--dim);cursor:pointer;transition:all .2s;border-left:2px solid transparent;
+  display:flex;align-items:center;gap:10px;
+}
+.nav-item:hover{color:var(--text);background:rgba(240,237,230,.03);}
+.nav-item.active{color:var(--lime);background:rgba(200,245,66,.05);border-left-color:var(--lime);}
+.nav-item .icon{font-size:14px;width:18px;text-align:center;}
+.sidebar-bottom{margin-top:auto;border-top:0.5px solid var(--border);}
+.sidebar-admin-info{padding:16px 20px;}
+.admin-name{font-size:12px;font-weight:500;color:var(--text);}
+.admin-role{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);margin-top:2px;}
+.logout-btn{
+  width:100%;padding:12px 20px;background:transparent;border:none;border-top:0.5px solid var(--border);
+  color:var(--dim);font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:1.5px;
+  text-transform:uppercase;cursor:pointer;text-align:left;transition:color .2s;
+}
+.logout-btn:hover{color:var(--red);}
+
+/* MAIN CONTENT */
+.main{margin-left:220px;padding:40px;min-height:100vh;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* TOP BAR */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:36px;
+  border-bottom:0.5px solid var(--border);
+  padding-bottom:20px;
+}
+.topbar-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;}
+.topbar-actions{display:flex;gap:12px;}
+
+/* BUTTONS */
+.btn-p{
+  background:var(--lime);color:var(--dark);border:none;
+  padding:10px 22px;font-family:'DM Sans',sans-serif;font-size:11px;
+  letter-spacing:1.5px;text-transform:uppercase;font-weight:500;cursor:pointer;transition:opacity .2s;
+}
+.btn-p:hover{opacity:.85;}
+.btn-g{
+  background:transparent;color:var(--muted);border:0.5px solid rgba(240,237,230,.15);
+  padding:10px 22px;font-family:'DM Sans',sans-serif;font-size:11px;
+  letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;
+}
+.btn-g:hover{border-color:rgba(240,237,230,.4);color:var(--text);}
+
+/* STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;}
+.stat-card{background:var(--card);border:0.5px solid var(--border);padding:24px 20px;}
+.stat-n{font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--lime);line-height:1;}
+.stat-l{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-top:6px;}
+.stat-delta{font-size:11px;color:var(--muted);margin-top:4px;}
+
+/* TABLES */
+.data-table{width:100%;border-collapse:collapse;background:var(--card);border:0.5px solid var(--border);}
+.data-table th{
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);
+  padding:12px 16px;border-bottom:0.5px solid var(--border);text-align:left;
+  white-space:nowrap;
+}
+.data-table td{
+  padding:13px 16px;font-size:13px;
+  border-bottom:0.5px solid rgba(240,237,230,.04);color:var(--muted);
+}
+.data-table tr:hover td{background:rgba(240,237,230,.02);}
+.action-btn{
+  font-size:11px;color:var(--lime);cursor:pointer;letter-spacing:1px;
+  border:none;background:none;font-family:'DM Sans',sans-serif;
+  padding:4px 0;transition:opacity .2s;
+}
+.action-btn:hover{opacity:.7;}
+.action-btn.del{color:var(--red);}
+
+/* PILLS */
+.pill{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:2px;}
+.pill-live{background:rgba(200,245,66,.1);color:var(--lime);}
+.pill-done{background:rgba(240,237,230,.08);color:var(--muted);}
+.pill-up{background:rgba(133,183,235,.1);color:#85B7EB;}
+.pill-draft{background:rgba(240,160,50,.1);color:#EF9F27;}
+
+/* SECTION HEADER */
+.sec-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;margin-top:32px;
+}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;}
+
+/* MODAL */
+.modal-bg{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.85);z-index:2000;
+  align-items:center;justify-content:center;
+}
+.modal-bg.open{display:flex;}
+.modal{
+  background:#111;border:0.5px solid var(--border);
+  padding:40px;width:500px;max-width:90vw;
+  max-height:85vh;overflow-y:auto;
+}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;margin-bottom:24px;}
+.field{margin-bottom:16px;}
+.field label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:6px;}
+.field input,.field select,.field textarea{
+  width:100%;background:var(--dark);border:0.5px solid rgba(240,237,230,.15);
+  color:var(--text);padding:10px 14px;font-family:'DM Sans',sans-serif;
+  font-size:13px;outline:none;transition:border-color .2s;
+}
+.field input:focus,.field select,.field textarea:focus{border-color:rgba(200,245,66,.4);}
+.field textarea{resize:vertical;min-height:80px;}
+.field select option{background:#111;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.modal-btns{display:flex;gap:12px;margin-top:24px;}
+.modal-cancel{
+  flex:1;background:transparent;border:0.5px solid rgba(240,237,230,.15);
+  color:var(--muted);padding:12px;font-family:'DM Sans',sans-serif;
+  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;
+}
+.modal-submit{
+  flex:2;background:var(--lime);border:none;color:var(--dark);padding:12px;
+  font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:1.5px;
+  text-transform:uppercase;cursor:pointer;font-weight:500;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:32px;right:32px;background:var(--lime);
+  color:var(--dark);padding:14px 24px;font-size:13px;font-weight:500;
+  z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s;letter-spacing:.5px;
+}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* ACTIVITY FEED */
+.activity-item{
+  display:flex;gap:16px;padding:14px 0;
+  border-bottom:0.5px solid rgba(240,237,230,.04);align-items:flex-start;
+}
+.activity-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--lime);
+  flex-shrink:0;margin-top:5px;
+}
+.activity-text{font-size:13px;color:var(--muted);line-height:1.5;}
+.activity-time{font-size:11px;color:var(--dim);margin-top:2px;}
+
+/* BACK TO SITE */
+.back-link{
+  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--dim);text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+  transition:color .2s;
+}
+.back-link:hover{color:var(--lime);}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">I.S.A League</div>
+    <div class="login-sub">Admin Portal · Restricted Access</div>
+    <div class="login-field">
+      <label class="login-label">Username</label>
+      <input class="login-input" type="text" id="login-user" placeholder="admin username" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <div class="login-field">
+      <label class="login-label">Password</label>
+      <input class="login-input" type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Access Admin Panel</button>
+    <div class="login-error" id="login-error">Incorrect credentials. Please try again.</div>
+    <div class="login-attempts" id="login-attempts"></div>
+  </div>
+</div>
+
+<!-- ADMIN SHELL -->
+<div id="admin-shell">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">I.S.A League</div>
+    <div class="sidebar-season">Admin Panel · ISAL2</div>
+
+    <div class="nav-item active" onclick="showTab(this,'tab-overview')"><span class="icon">⬛</span>Overview</div>
+    <div class="nav-item" onclick="showTab(this,'tab-matches')"><span class="icon">⚽</span>Matches</div>
+    <div class="nav-item" onclick="showTab(this,'tab-players')"><span class="icon">👤</span>Players</div>
+    <div class="nav-item" onclick="showTab(this,'tab-teams')"><span class="icon">🛡</span>Teams</div>
+    <div class="nav-item" onclick="showTab(this,'tab-media')"><span class="icon">📰</span>Media</div>
+    <div class="nav-item" onclick="showTab(this,'tab-fanzone')"><span class="icon">💬</span>Fan Zone</div>
+    <div class="nav-item" onclick="showTab(this,'tab-merch')"><span class="icon">👕</span>Merch</div>
+    <div class="nav-item" onclick="showTab(this,'tab-settings')"><span class="icon">⚙</span>Settings</div>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-admin-info">
+        <div class="admin-name">ISA Admin</div>
+        <div class="admin-role">Super Admin</div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">→ Sign Out</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- OVERVIEW -->
+    <div id="tab-overview" class="tab-content active">
+      <div class="topbar">
+        <div class="topbar-title">Dashboard</div>
+        <div class="topbar-actions">
+          <button class="btn-g" onclick="openModal('modal-match')">+ Match Result</button>
+          <button class="btn-p" onclick="openModal('modal-player')">+ Player</button>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-n">12</div><div class="stat-l">Teams</div><div class="stat-delta">+1 from ISAL1</div></div>
+        <div class="stat-card"><div class="stat-n">110</div><div class="stat-l">Matches Logged</div><div class="stat-delta">ISAL1 complete</div></div>
+        <div class="stat-card"><div class="stat-n">48</div><div class="stat-l">Players Tracked</div><div class="stat-delta">Across all teams</div></div>
+        <div class="stat-card"><div class="stat-n">3</div><div class="stat-l">Partners</div><div class="stat-delta">Lock & Key · JIBU · NRG</div></div>
+      </div>
+
+      <div class="sec-hdr" style="margin-top:0">
+        <div class="sec-title">Recent Activity</div>
+      </div>
+      <div style="background:var(--card);border:0.5px solid var(--border);padding:8px 20px;margin-bottom:24px;">
+        <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">WOLIS Saints added to ISAL2 roster</div><div class="activity-time">May 29, 2025</div></div></div>
+        <div class="activity-item"><div class="activity-dot" style="background:#85B7EB"></div><div><div class="activity-text">Article published: Best Players of ISAL1</div><div class="activity-time">May 1, 2025</div></div></div>
+        <div class="activity-item"><div class="activity-dot" style="background:#EF9F27"></div><div><div class="activity-text">ISAL1 Final standings confirmed — Harambe Stars champions</div><div class="activity-time">Sep 14, 2024</div></div></div>
+        <div class="activity-item"><div class="activity-dot" style="background:#ED93B1"></div><div><div class="activity-text">Season 1 completed — 110 matches logged</div><div class="activity-time">Sep 14, 2024</div></div></div>
+      </div>
+
+      <div class="sec-hdr">
+        <div class="sec-title">Upcoming Fixtures — ISAL2</div>
+        <button class="btn-g" style="padding:7px 16px;font-size:10px;" onclick="showTab(document.querySelector('.nav-item:nth-child(3)'),'tab-matches')">View All</button>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>Home</th><th>Away</th><th>Date</th><th>Matchday</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>Harambe Stars</td><td>WOLIS Saints</td><td>Jul 4, 2025</td><td>MD1</td><td><span class="pill pill-up">Upcoming</span></td><td><button class="action-btn" onclick="openModal('modal-match')">Edit</button></td></tr>
+          <tr><td>KISU Lions</td><td>Taibah Spartanz</td><td>Jul 4, 2025</td><td>MD1</td><td><span class="pill pill-up">Upcoming</span></td><td><button class="action-btn" onclick="openModal('modal-match')">Edit</button></td></tr>
+          <tr><td>Aga Khan 47z</td><td>Vienna Titans</td><td>Jul 4, 2025</td><td>MD1</td><td><span class="pill pill-up">Upcoming</span></td><td><button class="action-btn" onclick="openModal('modal-match')">Edit</button></td></tr>
+          <tr><td>ISU Leopards</td><td>Tank Hill Titans</td><td>Jul 4, 2025</td><td>MD1</td><td><span class="pill pill-up">Upcoming</span></td><td><button class="action-btn" onclick="openModal('modal-match')">Edit</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MATCHES -->
+    <div id="tab-matches" class="tab-content">
+      <div class="topbar">
+        <div class="topbar-title">Matches</div>
+        <div class="topbar-actions">
+          <button class="btn-g">Filter Season</button>
+          <button class="btn-p" onclick="openModal('modal-match')">+ Add Match</button>
+        </div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>Home</th><th>Away</th><th>Score</th><th>Date</th><th>Matchday</th><th>Season</th><th>Venue</th><th>Status</th><th></th></tr></thead>
+        <tbody id="matches-tbody">
+          <tr><td>Harambe Stars</td><td>Kabojja Blazers</td><td style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--lime)">2-0</td><td>Sep 14, 2024</td><td>MD11</td><td>ISAL1</td><td>Legends</td><td><span class="pill pill-done">Done</span></td><td><button class="action-btn" onclick="openModal('modal-match')">Edit</button> <button class="action-btn del">Del</button></td></tr>
+          <tr><td>KISU Lions</td><td>ISU Leopards</td><td style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--lime)">3-0</td><td>Sep 14, 2024</td><td>MD11</td><td>ISAL1</td><td>Legends</td><td><span class="pill pill-done">Done</span></td><td><button class="action-btn" onclick="openModal('modal-match')">Edit</button> <button class="action-btn del">Del</button></td></tr>
+          <tr><td>Taibah Spartanz</td><td>KISU Lions</td><td style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--lime)">4-1</td><td>Aug 31, 2024</td><td>MD10</td><td>ISAL1</td><td>Legends</td><td><span class="pill pill-done">Done</span></td><td><button class="action-btn" onclick="openModal('modal-match')">Edit</button> <button class="action-btn del">Del</button></td></tr>
+          <tr><td>AK Supa Strykaz</td><td>Rainbow OG's</td><td style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--lime)">5-1</td><td>Aug 24, 2024</td><td>MD9</td><td>ISAL1</td><td>Legends</td><td><span class="pill pill-done">Done</span></td><td><button class="action-btn" onclick="openModal('modal-match')">Edit</button> <button class="action-btn del">Del</button></td></tr>
+          <tr><td>Vienna Titans</td><td>Aga Khan 47z</td><td style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--muted)">0-0</td><td>Aug 17, 2024</td><td>MD8</td><td>ISAL1</td><td>Legends</td><td><span class="pill pill-done">Done</span></td><td><button class="action-btn" onclick="openModal('modal-match')">Edit</button> <button class="action-btn del">Del</button></td></tr>
+          <tr><td>Harambe Stars</td><td>WOLIS Saints</td><td style="color:var(--dim)">—</td><td>Jul 4, 2025</td><td>MD1</td><td>ISAL2</td><td>Legends</td><td><span class="pill pill-up">Upcoming</span></td><td><button class="action-btn" onclick="openModal('modal-match')">Edit</button> <button class="action-btn del">Del</button></td></tr>
+          <tr><td>KISU Lions</td><td>Taibah Spartanz</td><td style="color:var(--dim)">—</td><td>Jul 4, 2025</td><td>MD1</td><td>ISAL2</td><td>Legends</td><td><span class="pill pill-up">Upcoming</span></td><td><button class="action-btn" onclick="openModal('modal-match')">Edit</button> <button class="action-btn del">Del</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PLAYERS -->
+    <div id="tab-players" class="tab-content">
+      <div class="topbar">
+        <div class="topbar-title">Players</div>
+        <div class="topbar-actions">
+          <button class="btn-g">Export CSV</button>
+          <button class="btn-p" onclick="openModal('modal-player')">+ Add Player</button>
+        </div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>Player</th><th>Team</th><th>Position</th><th>Goals</th><th>Assists</th><th>CS</th><th>YC</th><th>RC</th><th>Season</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>Themba Nkesiga</td><td>Taibah Olympians</td><td>Forward</td><td>7</td><td>0</td><td>—</td><td>0</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Arafat Mugezi</td><td>Taibah Spartanz</td><td>Forward</td><td>7</td><td>0</td><td>—</td><td>1</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Ibra Mubiru</td><td>KISU Lions</td><td>Forward</td><td>6</td><td>1</td><td>—</td><td>0</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Stefano Loro</td><td>ISU Leopards</td><td>Midfielder</td><td>2</td><td>9</td><td>—</td><td>2</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Lee Okot</td><td>AK Supa Strykaz</td><td>Midfielder</td><td>5</td><td>5</td><td>—</td><td>0</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Trevor Zziwa</td><td>Vienna Titans</td><td>Forward</td><td>5</td><td>1</td><td>—</td><td>0</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Muhammed Ali</td><td>Tank Hill Titans</td><td>Midfielder</td><td>5</td><td>2</td><td>—</td><td>0</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Andrew Gagga</td><td>AK Supa Strykaz</td><td>Forward</td><td>5</td><td>0</td><td>—</td><td>0</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Joel Ssengendo</td><td>Harambe Stars</td><td>Forward</td><td>4</td><td>0</td><td>—</td><td>0</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Brian Rwehumbiza</td><td>KISU Lions</td><td>Midfielder</td><td>3</td><td>3</td><td>—</td><td>0</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Amani Tindyebwa</td><td>ISU Leopards</td><td>Forward</td><td>5</td><td>0</td><td>—</td><td>0</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Richard Kayima</td><td>Harambe Stars</td><td>Midfielder</td><td>1</td><td>3</td><td>—</td><td>1</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Muhammad Kakooza</td><td>Taibah Spartanz</td><td>Midfielder</td><td>1</td><td>3</td><td>—</td><td>0</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Aqeel Parpia</td><td>Aga Khan 47z</td><td>Goalkeeper</td><td>—</td><td>—</td><td>6</td><td>0</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Jordan Bagambe</td><td>Harambe Stars</td><td>Goalkeeper</td><td>—</td><td>—</td><td>5</td><td>0</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Chisamo Elisha</td><td>Vienna Titans</td><td>Goalkeeper</td><td>—</td><td>—</td><td>5</td><td>0</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Robert Mande</td><td>ISU Leopards</td><td>Goalkeeper</td><td>—</td><td>—</td><td>3</td><td>0</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>David Tombe</td><td>Harambe Stars</td><td>Forward</td><td>3</td><td>0</td><td>—</td><td>0</td><td>0</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Eddy Muleme</td><td>Harambe Stars</td><td>Midfielder</td><td>2</td><td>0</td><td>—</td><td>0</td><td>1</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+          <tr><td>Ignatius Nkesiga</td><td>Taibah Olympians</td><td>Forward</td><td>2</td><td>1</td><td>—</td><td>0</td><td>1</td><td>ISAL1</td><td><button class="action-btn" onclick="openModal('modal-player')">Edit</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TEAMS -->
+    <div id="tab-teams" class="tab-content">
+      <div class="topbar">
+        <div class="topbar-title">Teams</div>
+        <div class="topbar-actions">
+          <button class="btn-p" onclick="openModal('modal-team')">+ Add Team</button>
+        </div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>Team</th><th>Season</th><th>Pos</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:var(--text)">Harambe Stars</strong></td><td>ISAL1</td><td style="color:var(--lime);font-family:'Bebas Neue',sans-serif;font-size:18px">1</td><td>7</td><td>3</td><td>1</td><td>20</td><td>6</td><td>+14</td><td style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--lime)">24</td><td><span class="pill pill-done">Champions</span></td><td><button class="action-btn" onclick="openModal('modal-team')">Edit</button></td></tr>
+          <tr><td><strong style="color:var(--text)">KISU Lions</strong></td><td>ISAL1</td><td>2</td><td>6</td><td>3</td><td>2</td><td>18</td><td>10</td><td>+8</td><td style="font-family:'Bebas Neue',sans-serif;font-size:18px">21</td><td><span class="pill pill-done">Done</span></td><td><button class="action-btn" onclick="openModal('modal-team')">Edit</button></td></tr>
+          <tr><td><strong style="color:var(--text)">Aga Khan 47z</strong></td><td>ISAL1</td><td>3</td><td>6</td><td>2</td><td>3</td><td>12</td><td>6</td><td>+6</td><td style="font-family:'Bebas Neue',sans-serif;font-size:18px">20</td><td><span class="pill pill-done">Done</span></td><td><button class="action-btn" onclick="openModal('modal-team')">Edit</button></td></tr>
+          <tr><td><strong style="color:var(--text)">Taibah Spartanz</strong></td><td>ISAL1</td><td>4</td><td>5</td><td>4</td><td>2</td><td>24</td><td>13</td><td>+11</td><td style="font-family:'Bebas Neue',sans-serif;font-size:18px">19</td><td><span class="pill pill-done">Done</span></td><td><button class="action-btn" onclick="openModal('modal-team')">Edit</button></td></tr>
+          <tr><td><strong style="color:var(--text)">Vienna Titans</strong></td><td>ISAL1</td><td>5</td><td>4</td><td>5</td><td>2</td><td>14</td><td>12</td><td>+2</td><td style="font-family:'Bebas Neue',sans-serif;font-size:18px">17</td><td><span class="pill pill-done">Done</span></td><td><button class="action-btn" onclick="openModal('modal-team')">Edit</button></td></tr>
+          <tr><td><strong style="color:var(--text)">ISU Leopards</strong></td><td>ISAL1</td><td>6</td><td>4</td><td>4</td><td>3</td><td>16</td><td>13</td><td>+3</td><td style="font-family:'Bebas Neue',sans-serif;font-size:18px">16</td><td><span class="pill pill-done">Done</span></td><td><button class="action-btn" onclick="openModal('modal-team')">Edit</button></td></tr>
+          <tr><td><strong style="color:var(--text)">Aga Khan Supa Strykaz</strong></td><td>ISAL1</td><td>7</td><td>5</td><td>1</td><td>5</td><td>18</td><td>21</td><td>-3</td><td style="font-family:'Bebas Neue',sans-serif;font-size:18px">16</td><td><span class="pill pill-done">Done</span></td><td><button class="action-btn" onclick="openModal('modal-team')">Edit</button></td></tr>
+          <tr><td><strong style="color:var(--text)">Tank Hill Titans</strong></td><td>ISAL1</td><td>8</td><td>3</td><td>5</td><td>3</td><td>15</td><td>16</td><td>-1</td><td style="font-family:'Bebas Neue',sans-serif;font-size:18px">13</td><td><span class="pill pill-done">Done</span></td><td><button class="action-btn" onclick="openModal('modal-team')">Edit</button></td></tr>
+          <tr><td><strong style="color:var(--text)">Taibah Olympians</strong></td><td>ISAL1</td><td>9</td><td>3</td><td>3</td><td>5</td><td>14</td><td>17</td><td>-3</td><td style="font-family:'Bebas Neue',sans-serif;font-size:18px">12</td><td><span class="pill pill-done">Done</span></td><td><button class="action-btn" onclick="openModal('modal-team')">Edit</button></td></tr>
+          <tr><td><strong style="color:var(--text)">Kabojja Blazers</strong></td><td>ISAL1</td><td>10</td><td>2</td><td>3</td><td>6</td><td>10</td><td>18</td><td>-8</td><td style="font-family:'Bebas Neue',sans-serif;font-size:18px">9</td><td><span class="pill pill-done">Done</span></td><td><button class="action-btn" onclick="openModal('modal-team')">Edit</button></td></tr>
+          <tr><td><strong style="color:var(--text)">Rainbow OG's</strong></td><td>ISAL1</td><td>11</td><td>1</td><td>2</td><td>8</td><td>8</td><td>27</td><td>-19</td><td style="font-family:'Bebas Neue',sans-serif;font-size:18px">5</td><td><span class="pill pill-done">Done</span></td><td><button class="action-btn" onclick="openModal('modal-team')">Edit</button></td></tr>
+          <tr><td><strong style="color:var(--text)">WOLIS Saints</strong></td><td>ISAL2</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="pill pill-up">New</span></td><td><button class="action-btn" onclick="openModal('modal-team')">Edit</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MEDIA -->
+    <div id="tab-media" class="tab-content">
+      <div class="topbar">
+        <div class="topbar-title">Media</div>
+        <div class="topbar-actions">
+          <button class="btn-p" onclick="openModal('modal-article')">+ New Article</button>
+        </div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>Title</th><th>Category</th><th>Author</th><th>Date</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>WOLIS Saints Join the I.S.A League in Season 2 Expansion</td><td>Expansion</td><td>ISA League</td><td>May 29, 2025</td><td><span class="pill pill-live">Published</span></td><td><button class="action-btn" onclick="openModal('modal-article')">Edit</button> <button class="action-btn del">Del</button></td></tr>
+          <tr><td>Best Players from ISAL1: Goals, Assists and Clean Sheets</td><td>Stats</td><td>ISA League</td><td>May 1, 2025</td><td><span class="pill pill-live">Published</span></td><td><button class="action-btn" onclick="openModal('modal-article')">Edit</button> <button class="action-btn del">Del</button></td></tr>
+          <tr><td>Football Meets Flavor: ISA x Lock & Key Restaurant</td><td>Partners</td><td>ISA League</td><td>Apr 26, 2025</td><td><span class="pill pill-live">Published</span></td><td><button class="action-btn" onclick="openModal('modal-article')">Edit</button> <button class="action-btn del">Del</button></td></tr>
+          <tr><td>Official Hydration Partner: JIBU Joins ISAL</td><td>Partners</td><td>ISA League</td><td>Apr 25, 2025</td><td><span class="pill pill-live">Published</span></td><td><button class="action-btn" onclick="openModal('modal-article')">Edit</button> <button class="action-btn del">Del</button></td></tr>
+          <tr><td>Sleeper Teams from ISAL1: Performances Reviewed</td><td>Analysis</td><td>ISA League</td><td>Apr 23, 2025</td><td><span class="pill pill-live">Published</span></td><td><button class="action-btn" onclick="openModal('modal-article')">Edit</button> <button class="action-btn del">Del</button></td></tr>
+          <tr><td>ISAL2 Season Preview — What to Expect</td><td>Preview</td><td>ISA League</td><td>—</td><td><span class="pill pill-draft">Draft</span></td><td><button class="action-btn" onclick="openModal('modal-article')">Edit</button> <button class="action-btn del">Del</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FAN ZONE -->
+    <div id="tab-fanzone" class="tab-content">
+      <div class="topbar"><div class="topbar-title">Fan Zone</div></div>
+      <table class="data-table">
+        <thead><tr><th>Author</th><th>Content</th><th>Date</th><th>Reactions</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>Kalinda Mukasa</td><td style="max-width:300px;color:var(--muted)">ISAL1 was just a preview. We're coming back in Season 2 even stronger...</td><td>May 30, 2025</td><td>🔥 47</td><td><span class="pill pill-live">Approved</span></td><td><button class="action-btn del">Remove</button></td></tr>
+          <tr><td>Amara Tendo</td><td style="max-width:300px;color:var(--muted)">Can we talk about Stefano Loro's 9 assists for a second?...</td><td>May 28, 2025</td><td>🔥 31</td><td><span class="pill pill-live">Approved</span></td><td><button class="action-btn del">Remove</button></td></tr>
+          <tr><td>Brian Nsubuga</td><td style="max-width:300px;color:var(--muted)">The Taibah Spartanz vs KISU Lions 4-1 still hurts...</td><td>May 25, 2025</td><td>🔥 22</td><td><span class="pill pill-live">Approved</span></td><td><button class="action-btn del">Remove</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MERCH -->
+    <div id="tab-merch" class="tab-content">
+      <div class="topbar">
+        <div class="topbar-title">Merch Store</div>
+        <div class="topbar-actions">
+          <button class="btn-p" onclick="openModal('modal-product')">+ Add Product</button>
+        </div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>Product</th><th>Price (UGX)</th><th>Stock</th><th>Category</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>ISA League Classic Jersey</td><td>85,000</td><td>50</td><td>Apparel</td><td><span class="pill pill-live">Active</span></td><td><button class="action-btn" onclick="openModal('modal-product')">Edit</button></td></tr>
+          <tr><td>ISA League Snapback Cap</td><td>45,000</td><td>30</td><td>Accessories</td><td><span class="pill pill-live">Active</span></td><td><button class="action-btn" onclick="openModal('modal-product')">Edit</button></td></tr>
+          <tr><td>ISAL2 Launch Tee</td><td>55,000</td><td>40</td><td>Apparel</td><td><span class="pill pill-live">Active</span></td><td><button class="action-btn" onclick="openModal('modal-product')">Edit</button></td></tr>
+          <tr><td>ISA Track Jacket</td><td>120,000</td><td>20</td><td>Apparel</td><td><span class="pill pill-live">Active</span></td><td><button class="action-btn" onclick="openModal('modal-product')">Edit</button></td></tr>
+          <tr><td>ISA League Scarf</td><td>35,000</td><td>25</td><td>Accessories</td><td><span class="pill pill-live">Active</span></td><td><button class="action-btn" onclick="openModal('modal-product')">Edit</button></td></tr>
+          <tr><td>ISAL1 Champions Mug</td><td>30,000</td><td>15</td><td>Collectibles</td><td><span class="pill pill-live">Active</span></td><td><button class="action-btn" onclick="openModal('modal-product')">Edit</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="tab-settings" class="tab-content">
+      <div class="topbar"><div class="topbar-title">Settings</div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:800px;">
+        <div style="background:var(--card);border:0.5px solid var(--border);padding:28px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;margin-bottom:20px;">Admin Accounts</div>
+          <div class="field"><label>Username</label><input value="isa_admin" readonly style="opacity:.5"/></div>
+          <div class="field"><label>New Password</label><input type="password" placeholder="Leave blank to keep current"/></div>
+          <div class="field"><label>Confirm Password</label><input type="password" placeholder="Confirm new password"/></div>
+          <button class="btn-p" style="margin-top:8px" onclick="showToast('Password updated')">Update Password</button>
+        </div>
+        <div style="background:var(--card);border:0.5px solid var(--border);padding:28px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;margin-bottom:20px;">League Settings</div>
+          <div class="field"><label>Active Season</label><select><option>ISAL2</option><option>ISAL1</option></select></div>
+          <div class="field"><label>Season Kickoff Date</label><input type="date" value="2025-07-04"/></div>
+          <div class="field"><label>Venue</label><input value="Legends Sports Grounds, Kampala"/></div>
+          <div class="field"><label>Director of Football</label><input value="Arthur Jagwer"/></div>
+          <button class="btn-p" style="margin-top:8px" onclick="showToast('Settings saved')">Save Settings</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /admin-shell -->
+
+<!-- MODALS -->
+<div class="modal-bg" id="modal-match" onclick="closeBg(event,'modal-match')">
+  <div class="modal">
+    <div class="modal-title">Match Result</div>
+    <div class="field-row">
+      <div class="field"><label>Home Team</label><select><option>Harambe Stars</option><option>KISU Lions</option><option>Aga Khan 47z</option><option>Taibah Spartanz</option><option>Vienna Titans</option><option>ISU Leopards</option><option>AK Supa Strykaz</option><option>Tank Hill Titans</option><option>Taibah Olympians</option><option>Kabojja Blazers</option><option>Rainbow OG's</option><option>WOLIS Saints</option></select></div>
+      <div class="field"><label>Away Team</label><select><option>KISU Lions</option><option>Harambe Stars</option><option>Aga Khan 47z</option><option>Taibah Spartanz</option><option>Vienna Titans</option><option>ISU Leopards</option><option>AK Supa Strykaz</option><option>Tank Hill Titans</option><option>Taibah Olympians</option><option>Kabojja Blazers</option><option>Rainbow OG's</option><option>WOLIS Saints</option></select></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Home Score</label><input type="number" min="0" placeholder="0"/></div>
+      <div class="field"><label>Away Score</label><input type="number" min="0" placeholder="0"/></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Date</label><input type="date"/></div>
+      <div class="field"><label>Matchday</label><input placeholder="e.g. MD1"/></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Season</label><select><option>ISAL2</option><option>ISAL1</option></select></div>
+      <div class="field"><label>Status</label><select><option>Upcoming</option><option>Live</option><option>Completed</option></select></div>
+    </div>
+    <div class="field"><label>Goalscorers (Home)</label><input placeholder="Player name · 23', Player name · 67'"/></div>
+    <div class="field"><label>Goalscorers (Away)</label><input placeholder="Player name · 45'"/></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('modal-match')">Cancel</button>
+      <button class="modal-submit" onclick="saveAndClose('modal-match','Match saved successfully')">Save Match</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-player" onclick="closeBg(event,'modal-player')">
+  <div class="modal">
+    <div class="modal-title">Player</div>
+    <div class="field-row">
+      <div class="field"><label>Full Name</label><input placeholder="Player full name"/></div>
+      <div class="field"><label>Team</label><select><option>Harambe Stars</option><option>KISU Lions</option><option>Aga Khan 47z</option><option>Taibah Spartanz</option><option>Vienna Titans</option><option>ISU Leopards</option><option>AK Supa Strykaz</option><option>Tank Hill Titans</option><option>Taibah Olympians</option><option>Kabojja Blazers</option><option>Rainbow OG's</option><option>WOLIS Saints</option></select></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Position</label><select><option>Goalkeeper</option><option>Defender</option><option>Midfielder</option><option>Forward</option></select></div>
+      <div class="field"><label>Season</label><select><option>ISAL2</option><option>ISAL1</option></select></div>
+    </div>
+    <div class="field-row-3">
+      <div class="field"><label>Goals</label><input type="number" min="0" value="0"/></div>
+      <div class="field"><label>Assists</label><input type="number" min="0" value="0"/></div>
+      <div class="field"><label>Clean Sheets</label><input type="number" min="0" value="0"/></div>
+    </div>
+    <div class="field-row-3">
+      <div class="field"><label>Yellow Cards</label><input type="number" min="0" value="0"/></div>
+      <div class="field"><label>Red Cards</label><input type="number" min="0" value="0"/></div>
+      <div class="field"><label>Matches Played</label><input type="number" min="0" value="0"/></div>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('modal-player')">Cancel</button>
+      <button class="modal-submit" onclick="saveAndClose('modal-player','Player saved successfully')">Save Player</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-team" onclick="closeBg(event,'modal-team')">
+  <div class="modal">
+    <div class="modal-title">Team</div>
+    <div class="field-row">
+      <div class="field"><label>Team Name</label><input placeholder="Full team name"/></div>
+      <div class="field"><label>Abbreviation</label><input placeholder="e.g. HS" maxlength="4"/></div>
+    </div>
+    <div class="field"><label>School / Institution</label><input placeholder="e.g. Harambe International School"/></div>
+    <div class="field-row">
+      <div class="field"><label>Season</label><select><option>ISAL2</option><option>ISAL1</option></select></div>
+      <div class="field"><label>Status</label><select><option>Active</option><option>Pending</option></select></div>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('modal-team')">Cancel</button>
+      <button class="modal-submit" onclick="saveAndClose('modal-team','Team saved successfully')">Save Team</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-article" onclick="closeBg(event,'modal-article')">
+  <div class="modal">
+    <div class="modal-title">Article</div>
+    <div class="field"><label>Title</label><input placeholder="Article headline"/></div>
+    <div class="field-row">
+      <div class="field"><label>Category</label><select><option>Analysis</option><option>Stats</option><option>Partners</option><option>Expansion</option><option>Preview</option><option>Match Report</option></select></div>
+      <div class="field"><label>Status</label><select><option>Draft</option><option>Published</option></select></div>
+    </div>
+    <div class="field"><label>Excerpt</label><textarea placeholder="Short summary of the article..."></textarea></div>
+    <div class="field"><label>External Link (optional)</label><input placeholder="https://isaleague.sport.blog/..."/></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('modal-article')">Cancel</button>
+      <button class="modal-submit" onclick="saveAndClose('modal-article','Article saved successfully')">Save Article</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-product" onclick="closeBg(event,'modal-product')">
+  <div class="modal">
+    <div class="modal-title">Product</div>
+    <div class="field"><label>Product Name</label><input placeholder="e.g. ISA League Classic Jersey"/></div>
+    <div class="field-row">
+      <div class="field"><label>Price (UGX)</label><input type="number" placeholder="85000"/></div>
+      <div class="field"><label>Stock Quantity</label><input type="number" placeholder="50"/></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Category</label><select><option>Apparel</option><option>Accessories</option><option>Collectibles</option></select></div>
+      <div class="field"><label>Status</label><select><option>Active</option><option>Out of Stock</option><option>Hidden</option></select></div>
+    </div>
+    <div class="field"><label>Description</label><textarea placeholder="Short product description..."></textarea></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('modal-product')">Cancel</button>
+      <button class="modal-submit" onclick="saveAndClose('modal-product','Product saved successfully')">Save Product</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== CREDENTIALS =====
+// Change these before deploying. Do not use simple passwords in production.
+const ADMIN_CREDENTIALS = [
+  { user: 'isa_admin', pass: 'ISAL@2025!' },
+  { user: 'isa_media', pass: 'Media@2025!' }
+];
+
+let loginAttempts = 0;
+const MAX_ATTEMPTS = 5;
+let lockoutUntil = null;
+
+// ===== LOGIN =====
+function doLogin(){
+  if(lockoutUntil && Date.now() < lockoutUntil){
+    const secs = Math.ceil((lockoutUntil - Date.now())/1000);
+    document.getElementById('login-attempts').textContent = `Too many attempts. Try again in ${secs}s.`;
+    return;
+  }
+
+  const user = document.getElementById('login-user').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const match = ADMIN_CREDENTIALS.find(c => c.user === user && c.pass === pass);
+
+  if(match){
+    loginAttempts = 0;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-shell').style.display = 'block';
+    sessionStorage.setItem('isa_admin_auth', btoa(user + ':' + Date.now()));
+  } else {
+    loginAttempts++;
+    const err = document.getElementById('login-error');
+    err.style.display = 'block';
+    if(loginAttempts >= MAX_ATTEMPTS){
+      lockoutUntil = Date.now() + 30000;
+      err.textContent = 'Too many failed attempts. Locked for 30 seconds.';
+      setTimeout(()=>{ lockoutUntil=null; loginAttempts=0; err.style.display='none'; document.getElementById('login-attempts').textContent=''; }, 30000);
+    } else {
+      err.textContent = `Incorrect credentials. ${MAX_ATTEMPTS - loginAttempts} attempt(s) remaining.`;
+      document.getElementById('login-attempts').textContent = '';
+    }
+    document.getElementById('login-pass').value = '';
+    document.getElementById('login-pass').focus();
+  }
+}
+
+function doLogout(){
+  sessionStorage.removeItem('isa_admin_auth');
+  document.getElementById('admin-shell').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+// Check if already authenticated this session
+if(sessionStorage.getItem('isa_admin_auth')){
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-shell').style.display = 'block';
+}
+
+// ===== TAB NAVIGATION =====
+function showTab(el, tabId){
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  const target = document.getElementById(tabId);
+  if(target) target.classList.add('active');
+}
+
+// ===== MODALS =====
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function closeBg(e, id){ if(e.target === document.getElementById(id)) closeModal(id); }
+function saveAndClose(modalId, msg){ closeModal(modalId); showToast(msg); }
+
+// ===== TOAST =====
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>

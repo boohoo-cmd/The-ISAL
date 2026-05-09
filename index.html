@@ -273,29 +273,6 @@ footer{padding:40px 48px;display:flex;align-items:center;justify-content:space-b
 .toast{position:fixed;bottom:32px;right:32px;background:var(--lime);color:var(--dark);padding:14px 24px;font-size:13px;font-weight:500;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s;letter-spacing:.5px;}
 .toast.show{transform:translateY(0);opacity:1;}
 
-/* ADMIN PANEL */
-.admin-sidebar{width:220px;background:#0d0d0d;border-right:0.5px solid var(--border);position:fixed;top:0;left:0;bottom:0;padding:24px 0;z-index:500;display:none;}
-.admin-sidebar.open{display:flex;flex-direction:column;}
-.admin-logo{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;color:var(--lime);padding:0 20px 20px;border-bottom:0.5px solid var(--border);margin-bottom:12px;}
-.admin-nav-item{padding:12px 20px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);cursor:pointer;transition:all .2s;}
-.admin-nav-item:hover,.admin-nav-item.active{color:var(--lime);background:rgba(200,245,66,.05);border-left:2px solid var(--lime);}
-.admin-content{margin-left:220px;padding:40px;min-height:100vh;}
-.admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;}
-.admin-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;}
-.admin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;}
-.admin-stat{background:var(--card);border:0.5px solid var(--border);padding:20px;display:flex;flex-direction:column;gap:8px;}
-.admin-stat-n{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--lime);}
-.admin-stat-l{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);}
-.admin-table{width:100%;border-collapse:collapse;background:var(--card);border:0.5px solid var(--border);}
-.admin-table th{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);padding:12px 16px;border-bottom:0.5px solid var(--border);text-align:left;}
-.admin-table td{padding:12px 16px;font-size:13px;border-bottom:0.5px solid rgba(240,237,230,.04);color:var(--muted);}
-.admin-table tr:hover td{background:rgba(240,237,230,.02);}
-.admin-action{font-size:11px;color:var(--lime);cursor:pointer;letter-spacing:1px;border:none;background:none;font-family:'DM Sans',sans-serif;}
-.status-pill{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:2px;}
-.status-live{background:rgba(200,245,66,.1);color:var(--lime);}
-.status-done{background:rgba(240,237,230,.08);color:var(--muted);}
-.status-up{background:rgba(56,86,255,.1);color:#85B7EB;}
-
 /* MODAL */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2000;align-items:center;justify-content:center;}
 .modal-bg.open{display:flex;}
@@ -340,7 +317,7 @@ footer{padding:40px 48px;display:flex;align-items:center;justify-content:space-b
     <li><a onclick="showPage('media')" id="nav-media">Media</a></li>
     <li><a onclick="showPage('fanzone')" id="nav-fanzone">Fan Zone</a></li>
     <li><a onclick="showPage('merch')" id="nav-merch">Merch</a></li>
-    <li><a onclick="showPage('admin')" id="nav-admin" style="color:rgba(200,245,66,.4)">Admin</a></li>
+
   </ul>
   <button class="nav-cta" onclick="showModal('login-modal')">Sign In</button>
 </nav>
@@ -772,109 +749,6 @@ footer{padding:40px 48px;display:flex;align-items:center;justify-content:space-b
   <footer><div class="ft-logo">I.S.A LEAGUE</div><div class="ft-text">© 2025 International Schools Alumni League</div><div class="ft-text">Official Merch Store</div></footer>
 </div>
 
-<!-- =================== ADMIN PAGE =================== -->
-<div id="page-admin" class="page" style="padding:0;">
-  <div class="admin-sidebar open">
-    <div class="admin-logo">ISA Admin</div>
-    <div class="admin-nav-item active" onclick="adminTab(this,'admin-overview')">Overview</div>
-    <div class="admin-nav-item" onclick="adminTab(this,'admin-matches')">Matches</div>
-    <div class="admin-nav-item" onclick="adminTab(this,'admin-players-admin')">Players</div>
-    <div class="admin-nav-item" onclick="adminTab(this,'admin-teams-admin')">Teams</div>
-    <div class="admin-nav-item" onclick="adminTab(this,'admin-media-admin')">Media</div>
-    <div style="flex:1"></div>
-    <div class="admin-nav-item" onclick="showPage('home')" style="color:rgba(200,245,66,.5)">← Back to Site</div>
-  </div>
-  <div class="admin-content">
-    <div id="admin-overview">
-      <div class="admin-header">
-        <div class="admin-title">Dashboard</div>
-        <button class="btn-p" style="padding:10px 22px;font-size:11px;" onclick="showModal('add-match-modal')">+ Add Match Result</button>
-      </div>
-      <div class="admin-grid">
-        <div class="admin-stat"><div class="admin-stat-n">12</div><div class="admin-stat-l">Teams Registered</div></div>
-        <div class="admin-stat"><div class="admin-stat-n">110</div><div class="admin-stat-l">Matches Logged</div></div>
-        <div class="admin-stat"><div class="admin-stat-n">48</div><div class="admin-stat-l">Players Tracked</div></div>
-        <div class="admin-stat"><div class="admin-stat-n">2</div><div class="admin-stat-l">Active Sponsors</div></div>
-      </div>
-      <div style="margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;">Recent Matches</div>
-        <button class="admin-action" onclick="showModal('add-match-modal')">+ Add Result</button>
-      </div>
-      <table class="admin-table">
-        <thead><tr><th>Match</th><th>Score</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
-        <tbody>
-          <tr><td>Harambe Stars vs Kabojja Blazers</td><td style="color:var(--lime);font-family:'Bebas Neue',sans-serif;font-size:16px;">2-0</td><td>Sep 14, 2024</td><td><span class="status-pill status-done">Completed</span></td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>KISU Lions vs ISU Leopards</td><td style="color:var(--lime);font-family:'Bebas Neue',sans-serif;font-size:16px;">3-0</td><td>Sep 14, 2024</td><td><span class="status-pill status-done">Completed</span></td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>AK Supa Strykaz vs Rainbow OG's</td><td style="color:var(--lime);font-family:'Bebas Neue',sans-serif;font-size:16px;">5-1</td><td>Sep 7, 2024</td><td><span class="status-pill status-done">Completed</span></td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>Harambe Stars vs WOLIS Saints</td><td style="color:var(--muted);font-size:13px;">TBD</td><td>Jul 4, 2025</td><td><span class="status-pill status-up">Upcoming</span></td><td><button class="admin-action">Edit</button></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div id="admin-matches" style="display:none">
-      <div class="admin-header">
-        <div class="admin-title">Matches</div>
-        <button class="btn-p" style="padding:10px 22px;font-size:11px;" onclick="showModal('add-match-modal')">+ Add Match</button>
-      </div>
-      <table class="admin-table">
-        <thead><tr><th>Home</th><th>Away</th><th>Score</th><th>Matchday</th><th>Season</th><th>Status</th><th></th></tr></thead>
-        <tbody>
-          <tr><td>Harambe Stars</td><td>Kabojja Blazers</td><td style="color:var(--lime);font-family:'Bebas Neue',sans-serif;">2-0</td><td>MD11</td><td>ISAL1</td><td><span class="status-pill status-done">Done</span></td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>KISU Lions</td><td>ISU Leopards</td><td style="color:var(--lime);font-family:'Bebas Neue',sans-serif;">3-0</td><td>MD1</td><td>ISAL1</td><td><span class="status-pill status-done">Done</span></td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>Taibah Spartanz</td><td>KISU Lions</td><td style="color:var(--lime);font-family:'Bebas Neue',sans-serif;">4-1</td><td>MD10</td><td>ISAL1</td><td><span class="status-pill status-done">Done</span></td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>AK Supa Strykaz</td><td>Rainbow OG's</td><td style="color:var(--lime);font-family:'Bebas Neue',sans-serif;">5-1</td><td>MD9</td><td>ISAL1</td><td><span class="status-pill status-done">Done</span></td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>Vienna Titans</td><td>Aga Khan 47z</td><td style="color:var(--muted);font-size:13px;">0-0</td><td>MD8</td><td>ISAL1</td><td><span class="status-pill status-done">Done</span></td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>Harambe Stars</td><td>WOLIS Saints</td><td style="color:var(--dim);">—</td><td>MD1</td><td>ISAL2</td><td><span class="status-pill status-up">Upcoming</span></td><td><button class="admin-action">Edit</button></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div id="admin-players-admin" style="display:none">
-      <div class="admin-header">
-        <div class="admin-title">Players</div>
-        <button class="btn-p" style="padding:10px 22px;font-size:11px;" onclick="showModal('add-player-modal')">+ Add Player</button>
-      </div>
-      <table class="admin-table">
-        <thead><tr><th>Player</th><th>Team</th><th>Goals</th><th>Assists</th><th>Clean Sheets</th><th>Cards</th><th></th></tr></thead>
-        <tbody>
-          <tr><td>Themba Nkesiga</td><td>Taibah Olympians</td><td>7</td><td>0</td><td>—</td><td>0</td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>Arafat Mugezi</td><td>Taibah Spartanz</td><td>7</td><td>0</td><td>—</td><td>1Y</td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>Ibra Mubiru</td><td>KISU Lions</td><td>6</td><td>1</td><td>—</td><td>0</td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>Stefano Loro</td><td>ISU Leopards</td><td>2</td><td>9</td><td>—</td><td>2Y</td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>Lee Okot</td><td>AK Supa Strykaz</td><td>5</td><td>5</td><td>—</td><td>0</td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>Aqeel Parpia</td><td>Aga Khan 47z</td><td>—</td><td>—</td><td>6</td><td>0</td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>Jordan Bagambe</td><td>Harambe Stars</td><td>—</td><td>—</td><td>5</td><td>0</td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>Muhammed Ali</td><td>Tank Hill Titans</td><td>5</td><td>2</td><td>—</td><td>0</td><td><button class="admin-action">Edit</button></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div id="admin-teams-admin" style="display:none">
-      <div class="admin-header"><div class="admin-title">Teams</div><button class="btn-p" style="padding:10px 22px;font-size:11px;">+ Add Team</button></div>
-      <table class="admin-table">
-        <thead><tr><th>Team</th><th>Season</th><th>W</th><th>D</th><th>L</th><th>Pts</th><th></th></tr></thead>
-        <tbody>
-          <tr><td>Harambe Stars</td><td>ISAL1</td><td>7</td><td>3</td><td>1</td><td>24</td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>KISU Lions</td><td>ISAL1</td><td>6</td><td>3</td><td>2</td><td>21</td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>Aga Khan 47z</td><td>ISAL1</td><td>6</td><td>2</td><td>3</td><td>20</td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>Taibah Spartanz</td><td>ISAL1</td><td>5</td><td>4</td><td>2</td><td>19</td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>Vienna Titans</td><td>ISAL1</td><td>4</td><td>5</td><td>2</td><td>17</td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>ISU Leopards</td><td>ISAL1</td><td>4</td><td>4</td><td>3</td><td>16</td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>WOLIS Saints</td><td>ISAL2</td><td>—</td><td>—</td><td>—</td><td>—</td><td><button class="admin-action">Edit</button></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div id="admin-media-admin" style="display:none">
-      <div class="admin-header"><div class="admin-title">Media</div><button class="btn-p" style="padding:10px 22px;font-size:11px;">+ New Article</button></div>
-      <table class="admin-table">
-        <thead><tr><th>Title</th><th>Category</th><th>Date</th><th>Status</th><th></th></tr></thead>
-        <tbody>
-          <tr><td>WOLIS Saints Join ISAL2</td><td>Expansion</td><td>May 29, 2025</td><td><span class="status-pill status-live">Published</span></td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>Best Players of ISAL1</td><td>Stats</td><td>May 1, 2025</td><td><span class="status-pill status-live">Published</span></td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>ISA x Lock & Key Partnership</td><td>Partners</td><td>Apr 26, 2025</td><td><span class="status-pill status-live">Published</span></td><td><button class="admin-action">Edit</button></td></tr>
-          <tr><td>JIBU Official Hydration Partner</td><td>Partners</td><td>Apr 25, 2025</td><td><span class="status-pill status-live">Published</span></td><td><button class="admin-action">Edit</button></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
 
 <!-- MODALS -->
 <div class="modal-bg" id="login-modal" onclick="closeModalBg(event,'login-modal')">
@@ -1269,13 +1143,7 @@ function showPage(name){
   const nav = document.getElementById('nav-'+name);
   if(nav) nav.classList.add('active');
   window.scrollTo(0,0);
-  if(name==='admin'){
-    document.getElementById('main-nav').style.display='none';
-    document.querySelector('.ticker').style.display='none';
-  } else {
-    document.getElementById('main-nav').style.display='flex';
-    document.querySelector('.ticker').style.display='flex';
-  }
+  
 }
 
 function switchTab(el, tabId){
